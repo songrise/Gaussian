@@ -1,0 +1,723 @@
+/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/google/auth/__init__.py:55: Python37DeprecationWarning: After January 1, 2024, new releases of this library will drop support for Python 3.7. More details about Python 3.7 support can be found at https://cloud.google.com/python/docs/python37-sunset/
+  warnings.warn(message, Python37DeprecationWarning)
+/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/google/oauth2/__init__.py:40: Python37DeprecationWarning: After January 1, 2024, new releases of this library will drop support for Python 3.7. More details about Python 3.7 support can be found at https://cloud.google.com/python/docs/python37-sunset/
+  warnings.warn(message, Python37DeprecationWarning)
+TensorFlow installation not found - running with reduced feature set.
+
+NOTE: Using experimental fast data loading logic. To disable, pass
+    "--load_fast=false" and report issues on GitHub. More details:
+    https://github.com/tensorflow/tensorboard/issues/4784
+
+Serving TensorBoard on localhost; to expose to the network, use a proxy or pass --bind_all
+TensorBoard 2.11.2 at http://localhost:6006/ (Press CTRL+C to quit)
+/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/google/auth/__init__.py:55: Python37DeprecationWarning: After January 1, 2024, new releases of this library will drop support for Python 3.7. More details about Python 3.7 support can be found at https://cloud.google.com/python/docs/python37-sunset/
+  warnings.warn(message, Python37DeprecationWarning)
+/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/google/oauth2/__init__.py:40: Python37DeprecationWarning: After January 1, 2024, new releases of this library will drop support for Python 3.7. More details about Python 3.7 support can be found at https://cloud.google.com/python/docs/python37-sunset/
+  warnings.warn(message, Python37DeprecationWarning)
+TensorFlow installation not found - running with reduced feature set.
+
+NOTE: Using experimental fast data loading logic. To disable, pass
+    "--load_fast=false" and report issues on GitHub. More details:
+    https://github.com/tensorflow/tensorboard/issues/4784
+
+Serving TensorBoard on localhost; to expose to the network, use a proxy or pass --bind_all
+TensorBoard 2.11.2 at http://localhost:6006/ (Press CTRL+C to quit)
+Fetching 15 files:   0%|          | 0/15 [00:00<?, ?it/s]
+Downloading (…)_encoder/config.json:   0%|          | 0.00/617 [00:00<?, ?B/s][ADownloading (…)_encoder/config.json: 100%|██████████| 617/617 [00:00<00:00, 138kB/s]
+
+Downloading (…)ch_model.safetensors:   0%|          | 0.00/3.44G [00:00<?, ?B/s][A
+
+Downloading model.safetensors:   0%|          | 0.00/1.22G [00:00<?, ?B/s][A[A
+
+Downloading model.safetensors:   1%|          | 10.5M/1.22G [00:13<25:39, 783kB/s][A[A
+Downloading (…)ch_model.safetensors:   0%|          | 10.5M/3.44G [00:16<1:29:22, 639kB/s][A
+Downloading (…)ch_model.safetensors:   1%|          | 21.0M/3.44G [00:30<1:21:26, 699kB/s][A
+
+Downloading model.safetensors:   2%|▏         | 21.0M/1.22G [00:31<30:46, 647kB/s][A[A
+Downloading (…)ch_model.safetensors:   1%|          | 21.0M/3.44G [00:44<1:21:26, 699kB/s][A
+
+Downloading model.safetensors:   2%|▏         | 21.0M/1.22G [00:42<30:46, 647kB/s][A[A
+Downloading (…)ch_model.safetensors:   1%|          | 31.5M/3.44G [00:52<1:39:55, 568kB/s][A
+
+Downloading model.safetensors:   3%|▎         | 31.5M/1.22G [00:56<38:12, 517kB/s][A[A
+Downloading (…)ch_model.safetensors:   1%|          | 31.5M/3.44G [01:04<1:39:55, 568kB/s][A
+
+Downloading model.safetensors:   3%|▎         | 31.5M/1.22G [01:12<38:12, 517kB/s][A[A
+Downloading (…)ch_model.safetensors:   1%|          | 41.9M/3.44G [01:23<2:04:49, 453kB/s][A
+
+Downloading model.safetensors:   3%|▎         | 41.9M/1.22G [01:25<43:56, 445kB/s][A[A
+Downloading (…)ch_model.safetensors:   1%|          | 41.9M/3.44G [01:34<2:04:49, 453kB/s][A
+
+Downloading model.safetensors:   3%|▎         | 41.9M/1.22G [01:42<43:56, 445kB/s][A[A
+
+Downloading model.safetensors:   4%|▍         | 52.4M/1.22G [01:49<43:43, 443kB/s][A[A
+Downloading (…)ch_model.safetensors:   2%|▏         | 52.4M/3.44G [01:53<2:17:45, 410kB/s][A
+Downloading (…)ch_model.safetensors:   2%|▏         | 52.4M/3.44G [02:04<2:17:45, 410kB/s][A
+
+Downloading model.safetensors:   4%|▍         | 52.4M/1.22G [02:02<43:43, 443kB/s][A[A
+
+Downloading model.safetensors:   5%|▌         | 62.9M/1.22G [02:06<39:25, 487kB/s][A[A
+Downloading (…)ch_model.safetensors:   2%|▏         | 62.9M/3.44G [02:15<2:10:38, 431kB/s][A
+
+Downloading model.safetensors:   5%|▌         | 62.9M/1.22G [02:22<39:25, 487kB/s][A[A
+
+Downloading model.safetensors:   6%|▌         | 73.4M/1.22G [02:22<35:49, 532kB/s][A[A
+Downloading (…)ch_model.safetensors:   2%|▏         | 73.4M/3.44G [02:27<1:48:20, 518kB/s][A
+
+Downloading model.safetensors:   7%|▋         | 83.9M/1.22G [02:33<30:20, 622kB/s][A[A
+Downloading (…)ch_model.safetensors:   2%|▏         | 83.9M/3.44G [02:36<1:29:23, 625kB/s][A
+Downloading (…)ch_model.safetensors:   3%|▎         | 94.4M/3.44G [02:45<1:16:45, 726kB/s][A
+
+Downloading model.safetensors:   8%|▊         | 94.4M/1.22G [02:47<28:35, 654kB/s][A[A
+Downloading (…)ch_model.safetensors:   3%|▎         | 105M/3.44G [03:00<1:17:28, 717kB/s] [A
+
+Downloading model.safetensors:   8%|▊         | 94.4M/1.22G [03:02<28:35, 654kB/s][A[A
+
+Downloading model.safetensors:   9%|▊         | 105M/1.22G [03:04<28:46, 644kB/s] [A[A
+Downloading (…)ch_model.safetensors:   3%|▎         | 105M/3.44G [03:14<1:17:28, 717kB/s][A
+Downloading (…)ch_model.safetensors:   3%|▎         | 115M/3.44G [03:18<1:22:35, 671kB/s][A
+
+Downloading model.safetensors:   9%|▉         | 115M/1.22G [03:22<29:23, 624kB/s][A[A
+Downloading (…)ch_model.safetensors:   3%|▎         | 115M/3.44G [03:34<1:22:35, 671kB/s][A
+
+Downloading model.safetensors:   9%|▉         | 115M/1.22G [03:32<29:23, 624kB/s][A[A
+Downloading (…)ch_model.safetensors:   4%|▎         | 126M/3.44G [03:37<1:28:20, 625kB/s][A
+
+Downloading model.safetensors:  10%|█         | 126M/1.22G [03:38<28:47, 631kB/s][A[A
+Downloading (…)ch_model.safetensors:   4%|▍         | 136M/3.44G [03:53<1:26:34, 636kB/s][A
+
+Downloading model.safetensors:  10%|█         | 126M/1.22G [03:52<28:47, 631kB/s][A[A
+
+Downloading model.safetensors:  11%|█         | 136M/1.22G [03:55<28:29, 632kB/s][A[A
+Downloading (…)ch_model.safetensors:   4%|▍         | 136M/3.44G [04:04<1:26:34, 636kB/s][A
+Downloading (…)ch_model.safetensors:   4%|▍         | 147M/3.44G [04:10<1:25:56, 638kB/s][A
+
+Downloading model.safetensors:  12%|█▏        | 147M/1.22G [04:11<28:05, 634kB/s][A[A
+Downloading (…)ch_model.safetensors:   4%|▍         | 147M/3.44G [04:24<1:25:56, 638kB/s][A
+
+Downloading model.safetensors:  12%|█▏        | 147M/1.22G [04:22<28:05, 634kB/s][A[A
+Downloading (…)ch_model.safetensors:   5%|▍         | 157M/3.44G [04:32<1:35:40, 572kB/s][A
+Downloading (…)ch_model.safetensors:   5%|▍         | 157M/3.44G [04:44<1:35:40, 572kB/s][A
+
+Downloading model.safetensors:  13%|█▎        | 157M/1.22G [04:43<35:44, 494kB/s][A[A
+Downloading (…)ch_model.safetensors:   5%|▍         | 168M/3.44G [04:57<1:45:10, 518kB/s][A
+
+Downloading model.safetensors:  13%|█▎        | 157M/1.22G [05:02<35:44, 494kB/s][A[A
+
+Downloading model.safetensors:  14%|█▍        | 168M/1.22G [05:05<35:30, 492kB/s][A[A
+Downloading (…)ch_model.safetensors:   5%|▍         | 168M/3.44G [05:14<1:45:10, 518kB/s][A
+Downloading (…)ch_model.safetensors:   5%|▌         | 178M/3.44G [05:18<1:45:17, 516kB/s][A
+
+Downloading model.safetensors:  14%|█▍        | 168M/1.22G [05:22<35:30, 492kB/s][A[A
+Downloading (…)ch_model.safetensors:   5%|▌         | 178M/3.44G [05:34<1:45:17, 516kB/s][A
+
+Downloading model.safetensors:  15%|█▍        | 178M/1.22G [05:35<39:39, 436kB/s][A[A
+
+Downloading model.safetensors:  15%|█▍        | 178M/1.22G [05:52<39:39, 436kB/s][A[A
+Downloading (…)ch_model.safetensors:   5%|▌         | 189M/3.44G [06:02<2:21:56, 382kB/s][A
+Downloading (…)ch_model.safetensors:   5%|▌         | 189M/3.44G [06:14<2:21:56, 382kB/s][A
+
+Downloading model.safetensors:  16%|█▌        | 189M/1.22G [06:19<48:54, 350kB/s][A[A
+Downloading (…)ch_model.safetensors:   6%|▌         | 199M/3.44G [06:27<2:18:10, 391kB/s][A
+
+Downloading model.safetensors:  16%|█▌        | 189M/1.22G [06:32<48:54, 350kB/s][A[A
+
+Downloading model.safetensors:  16%|█▋        | 199M/1.22G [06:39<43:41, 388kB/s][A[A
+Downloading (…)ch_model.safetensors:   6%|▌         | 199M/3.44G [06:44<2:18:10, 391kB/s][A
+
+Downloading model.safetensors:  16%|█▋        | 199M/1.22G [06:52<43:41, 388kB/s][A[A
+Downloading (…)ch_model.safetensors:   6%|▌         | 210M/3.44G [06:58<2:24:21, 373kB/s][A
+
+Downloading model.safetensors:  17%|█▋        | 210M/1.22G [07:00<40:24, 415kB/s][A[A
+Downloading (…)ch_model.safetensors:   6%|▌         | 210M/3.44G [07:14<2:24:21, 373kB/s][A
+
+Downloading model.safetensors:  17%|█▋        | 210M/1.22G [07:12<40:24, 415kB/s][A[A
+Downloading (…)ch_model.safetensors:   6%|▋         | 220M/3.44G [07:17<2:09:06, 415kB/s][A
+
+Downloading model.safetensors:  18%|█▊        | 220M/1.22G [07:18<36:34, 454kB/s][A[A
+Downloading (…)ch_model.safetensors:   6%|▋         | 220M/3.44G [07:34<2:09:06, 415kB/s][A
+
+Downloading model.safetensors:  18%|█▊        | 220M/1.22G [07:32<36:34, 454kB/s][A[A
+Downloading (…)ch_model.safetensors:   7%|▋         | 231M/3.44G [07:39<2:03:30, 433kB/s][A
+
+Downloading model.safetensors:  19%|█▉        | 231M/1.22G [07:45<38:11, 430kB/s][A[A
+Downloading (…)ch_model.safetensors:   7%|▋         | 231M/3.44G [07:54<2:03:30, 433kB/s][A
+Downloading (…)ch_model.safetensors:   7%|▋         | 241M/3.44G [08:02<2:02:38, 434kB/s][A
+
+Downloading model.safetensors:  19%|█▉        | 231M/1.22G [08:02<38:11, 430kB/s][A[A
+
+Downloading model.safetensors:  20%|█▉        | 241M/1.22G [08:11<38:18, 424kB/s][A[A
+Downloading (…)ch_model.safetensors:   7%|▋         | 241M/3.44G [08:14<2:02:38, 434kB/s][A
+
+Downloading model.safetensors:  20%|█▉        | 241M/1.22G [08:22<38:18, 424kB/s][A[A
+Downloading (…)ch_model.safetensors:   7%|▋         | 252M/3.44G [08:29<2:06:24, 420kB/s][A
+
+Downloading model.safetensors:  21%|██        | 252M/1.22G [08:36<38:03, 422kB/s][A[A
+Downloading (…)ch_model.safetensors:   7%|▋         | 252M/3.44G [08:44<2:06:24, 420kB/s][A
+
+Downloading model.safetensors:  21%|██        | 252M/1.22G [08:52<38:03, 422kB/s][A[A
+Downloading (…)ch_model.safetensors:   8%|▊         | 262M/3.44G [08:54<2:05:56, 420kB/s][A
+
+Downloading model.safetensors:  22%|██▏       | 262M/1.22G [08:54<34:21, 463kB/s][A[A
+
+Downloading model.safetensors:  22%|██▏       | 273M/1.22G [09:12<31:59, 491kB/s][A[A
+Downloading (…)ch_model.safetensors:   8%|▊         | 262M/3.44G [09:14<2:05:56, 420kB/s][A
+Downloading (…)ch_model.safetensors:   8%|▊         | 273M/3.44G [09:16<2:00:38, 437kB/s][A
+
+Downloading model.safetensors:  22%|██▏       | 273M/1.22G [09:22<31:59, 491kB/s][A[A
+
+Downloading model.safetensors:  23%|██▎       | 283M/1.22G [09:30<30:22, 512kB/s][A[A
+Downloading (…)ch_model.safetensors:   8%|▊         | 273M/3.44G [09:34<2:00:38, 437kB/s][A
+Downloading (…)ch_model.safetensors:   8%|▊         | 283M/3.44G [09:38<1:57:20, 448kB/s][A
+
+Downloading model.safetensors:  23%|██▎       | 283M/1.22G [09:42<30:22, 512kB/s][A[A
+Downloading (…)ch_model.safetensors:   8%|▊         | 283M/3.44G [09:54<1:57:20, 448kB/s][A
+
+Downloading model.safetensors:  24%|██▍       | 294M/1.22G [09:56<32:27, 474kB/s][A[A
+Downloading (…)ch_model.safetensors:   9%|▊         | 294M/3.44G [10:05<2:01:45, 430kB/s][A
+
+Downloading model.safetensors:  24%|██▍       | 294M/1.22G [10:12<32:27, 474kB/s][A[A
+
+Downloading model.safetensors:  25%|██▌       | 304M/1.22G [10:20<32:38, 466kB/s][A[A
+Downloading (…)ch_model.safetensors:   9%|▉         | 304M/3.44G [10:24<1:53:59, 458kB/s][A
+Downloading (…)ch_model.safetensors:   9%|▉         | 304M/3.44G [10:34<1:53:59, 458kB/s][A
+
+Downloading model.safetensors:  25%|██▌       | 304M/1.22G [10:32<32:38, 466kB/s][A[A
+
+Downloading model.safetensors:  26%|██▌       | 315M/1.22G [10:57<38:30, 390kB/s][A[A
+Downloading (…)ch_model.safetensors:   9%|▉         | 315M/3.44G [11:12<2:31:24, 344kB/s][A
+
+Downloading model.safetensors:  26%|██▌       | 315M/1.22G [11:12<38:30, 390kB/s][A[A
+Downloading (…)ch_model.safetensors:   9%|▉         | 315M/3.44G [11:24<2:31:24, 344kB/s][A
+
+Downloading model.safetensors:  27%|██▋       | 325M/1.22G [11:28<39:53, 372kB/s][A[A
+Downloading (…)ch_model.safetensors:   9%|▉         | 325M/3.44G [11:35<2:19:52, 371kB/s][A
+
+Downloading model.safetensors:  27%|██▋       | 325M/1.22G [11:42<39:53, 372kB/s][A[A
+Downloading (…)ch_model.safetensors:   9%|▉         | 325M/3.44G [11:54<2:19:52, 371kB/s][A
+
+Downloading model.safetensors:  28%|██▊       | 336M/1.22G [11:56<39:14, 374kB/s][A[A
+Downloading (…)ch_model.safetensors:  10%|▉         | 336M/3.44G [12:01<2:15:45, 381kB/s][A
+Downloading (…)ch_model.safetensors:  10%|▉         | 336M/3.44G [12:14<2:15:45, 381kB/s][A
+
+Downloading model.safetensors:  28%|██▊       | 336M/1.22G [12:12<39:14, 374kB/s][A[A
+
+Downloading model.safetensors:  28%|██▊       | 346M/1.22G [12:20<37:20, 388kB/s][A[A
+Downloading (…)ch_model.safetensors:  10%|█         | 346M/3.44G [12:27<2:13:24, 386kB/s][A
+
+Downloading model.safetensors:  28%|██▊       | 346M/1.22G [12:32<37:20, 388kB/s][A[A
+Downloading (…)ch_model.safetensors:  10%|█         | 346M/3.44G [12:44<2:13:24, 386kB/s][A
+
+Downloading model.safetensors:  29%|██▉       | 357M/1.22G [12:45<35:59, 398kB/s][A[A
+Downloading (…)ch_model.safetensors:  10%|█         | 357M/3.44G [12:53<2:10:13, 394kB/s][A
+Downloading (…)ch_model.safetensors:  10%|█         | 357M/3.44G [13:04<2:10:13, 394kB/s][A
+
+Downloading model.safetensors:  29%|██▉       | 357M/1.22G [13:02<35:59, 398kB/s][A[A
+Downloading (…)ch_model.safetensors:  11%|█         | 367M/3.44G [13:09<1:54:39, 446kB/s][A
+
+Downloading model.safetensors:  30%|███       | 367M/1.22G [13:08<34:07, 415kB/s][A[A
+Downloading (…)ch_model.safetensors:  11%|█         | 367M/3.44G [13:24<1:54:39, 446kB/s][A
+
+Downloading model.safetensors:  30%|███       | 367M/1.22G [13:22<34:07, 415kB/s][A[A
+Downloading (…)ch_model.safetensors:  11%|█         | 377M/3.44G [13:33<1:55:12, 443kB/s][A
+Downloading (…)ch_model.safetensors:  11%|█         | 377M/3.44G [13:44<1:55:12, 443kB/s][A
+
+Downloading model.safetensors:  31%|███       | 377M/1.22G [13:42<37:12, 376kB/s][A[A
+
+Downloading model.safetensors:  31%|███       | 377M/1.22G [14:02<37:12, 376kB/s][A[A
+Downloading (…)ch_model.safetensors:  11%|█▏        | 388M/3.44G [14:10<2:13:33, 381kB/s][A
+
+Downloading model.safetensors:  32%|███▏      | 388M/1.22G [14:12<37:41, 366kB/s][A[A
+Downloading (…)ch_model.safetensors:  11%|█▏        | 388M/3.44G [14:24<2:13:33, 381kB/s][A
+
+Downloading model.safetensors:  32%|███▏      | 388M/1.22G [14:32<37:41, 366kB/s][A[A
+Downloading (…)ch_model.safetensors:  12%|█▏        | 398M/3.44G [14:50<2:30:54, 336kB/s][A
+
+Downloading model.safetensors:  33%|███▎      | 398M/1.22G [14:51<41:12, 331kB/s][A[A
+Downloading (…)ch_model.safetensors:  12%|█▏        | 398M/3.44G [15:04<2:30:54, 336kB/s][A
+
+Downloading model.safetensors:  33%|███▎      | 398M/1.22G [15:02<41:12, 331kB/s][A[A
+
+Downloading model.safetensors:  34%|███▎      | 409M/1.22G [15:33<44:33, 302kB/s][A[A
+Downloading (…)ch_model.safetensors:  12%|█▏        | 409M/3.44G [15:40<2:58:20, 283kB/s][A
+Downloading (…)ch_model.safetensors:  12%|█▏        | 409M/3.44G [15:54<2:58:20, 283kB/s][A
+
+Downloading model.safetensors:  34%|███▎      | 409M/1.22G [15:52<44:33, 302kB/s][A[A
+Downloading (…)ch_model.safetensors:  12%|█▏        | 419M/3.44G [16:06<2:41:03, 312kB/s][A
+
+Downloading model.safetensors:  34%|███▍      | 419M/1.22G [16:05<42:54, 309kB/s][A[A
+Downloading (…)ch_model.safetensors:  12%|█▏        | 419M/3.44G [16:24<2:41:03, 312kB/s][A
+
+Downloading model.safetensors:  34%|███▍      | 419M/1.22G [16:22<42:54, 309kB/s][A[A
+Downloading (…)ch_model.safetensors:  13%|█▎        | 430M/3.44G [16:31<2:29:31, 335kB/s][A
+
+Downloading model.safetensors:  35%|███▌      | 430M/1.22G [16:39<42:31, 308kB/s][A[A
+Downloading (…)ch_model.safetensors:  13%|█▎        | 430M/3.44G [16:44<2:29:31, 335kB/s][A
+Downloading (…)ch_model.safetensors:  13%|█▎        | 440M/3.44G [16:53<2:14:20, 372kB/s][A
+
+Downloading model.safetensors:  35%|███▌      | 430M/1.22G [16:52<42:31, 308kB/s][A[A
+
+Downloading model.safetensors:  36%|███▌      | 440M/1.22G [16:55<35:13, 367kB/s][A[A
+Downloading (…)ch_model.safetensors:  13%|█▎        | 440M/3.44G [17:04<2:14:20, 372kB/s][A
+
+Downloading model.safetensors:  36%|███▌      | 440M/1.22G [17:12<35:13, 367kB/s][A[A
+Downloading (…)ch_model.safetensors:  13%|█▎        | 451M/3.44G [17:21<2:13:41, 372kB/s][A
+
+Downloading model.safetensors:  37%|███▋      | 451M/1.22G [17:22<34:09, 373kB/s][A[A
+Downloading (…)ch_model.safetensors:  13%|█▎        | 451M/3.44G [17:34<2:13:41, 372kB/s][A
+Downloading (…)ch_model.safetensors:  13%|█▎        | 461M/3.44G [17:42<2:03:20, 402kB/s][A
+
+Downloading model.safetensors:  37%|███▋      | 451M/1.22G [17:42<34:09, 373kB/s][A[A
+
+Downloading model.safetensors:  38%|███▊      | 461M/1.22G [17:51<33:53, 371kB/s][A[A
+Downloading (…)ch_model.safetensors:  13%|█▎        | 461M/3.44G [17:54<2:03:20, 402kB/s][A
+
+Downloading model.safetensors:  38%|███▊      | 461M/1.22G [18:02<33:53, 371kB/s][A[A
+Downloading (…)ch_model.safetensors:  14%|█▎        | 472M/3.44G [18:04<1:58:10, 418kB/s][A
+
+Downloading model.safetensors:  39%|███▉      | 472M/1.22G [18:17<32:37, 380kB/s][A[A
+Downloading (…)ch_model.safetensors:  14%|█▎        | 472M/3.44G [18:24<1:58:10, 418kB/s][A
+Downloading (…)ch_model.safetensors:  14%|█▍        | 482M/3.44G [18:28<1:54:55, 429kB/s][A
+
+Downloading model.safetensors:  39%|███▉      | 472M/1.22G [18:32<32:37, 380kB/s][A[A
+
+Downloading model.safetensors:  40%|███▉      | 482M/1.22G [18:39<30:25, 402kB/s][A[A
+Downloading (…)ch_model.safetensors:  14%|█▍        | 482M/3.44G [18:44<1:54:55, 429kB/s][A
+Downloading (…)ch_model.safetensors:  14%|█▍        | 493M/3.44G [18:50<1:51:32, 440kB/s][A
+
+Downloading model.safetensors:  40%|███▉      | 482M/1.22G [18:52<30:25, 402kB/s][A[A
+Downloading (…)ch_model.safetensors:  14%|█▍        | 493M/3.44G [19:04<1:51:32, 440kB/s][A
+
+Downloading model.safetensors:  41%|████      | 493M/1.22G [19:02<28:54, 417kB/s][A[A
+Downloading (…)ch_model.safetensors:  15%|█▍        | 503M/3.44G [19:13<1:49:51, 445kB/s][A
+Downloading (…)ch_model.safetensors:  15%|█▍        | 503M/3.44G [19:24<1:49:51, 445kB/s][A
+
+Downloading model.safetensors:  41%|████      | 493M/1.22G [19:22<28:54, 417kB/s][A[A
+
+Downloading model.safetensors:  41%|████▏     | 503M/1.22G [19:28<28:44, 413kB/s][A[A
+Downloading (…)ch_model.safetensors:  15%|█▍        | 514M/3.44G [19:42<1:57:50, 414kB/s][A
+
+Downloading model.safetensors:  41%|████▏     | 503M/1.22G [19:42<28:44, 413kB/s][A[A
+Downloading (…)ch_model.safetensors:  15%|█▍        | 514M/3.44G [19:54<1:57:50, 414kB/s][A
+
+Downloading model.safetensors:  42%|████▏     | 514M/1.22G [19:52<27:54, 419kB/s][A[A
+Downloading (…)ch_model.safetensors:  15%|█▌        | 524M/3.44G [20:08<1:57:48, 412kB/s][A
+
+Downloading model.safetensors:  42%|████▏     | 514M/1.22G [20:12<27:54, 419kB/s][A[A
+
+Downloading model.safetensors:  43%|████▎     | 524M/1.22G [20:12<25:47, 447kB/s][A[A
+Downloading (…)ch_model.safetensors:  15%|█▌        | 524M/3.44G [20:24<1:57:48, 412kB/s][A
+Downloading (…)ch_model.safetensors:  16%|█▌        | 535M/3.44G [20:29<1:51:28, 434kB/s][A
+
+Downloading model.safetensors:  44%|████▍     | 535M/1.22G [20:31<23:56, 474kB/s][A[A
+Downloading (…)ch_model.safetensors:  16%|█▌        | 535M/3.44G [20:44<1:51:28, 434kB/s][A
+
+Downloading model.safetensors:  44%|████▍     | 535M/1.22G [20:42<23:56, 474kB/s][A[A
+Downloading (…)ch_model.safetensors:  16%|█▌        | 545M/3.44G [20:48<1:43:45, 465kB/s][A
+
+Downloading model.safetensors:  45%|████▍     | 545M/1.22G [20:51<22:57, 487kB/s][A[A
+Downloading (…)ch_model.safetensors:  16%|█▌        | 545M/3.44G [21:04<1:43:45, 465kB/s][A
+
+Downloading model.safetensors:  45%|████▍     | 545M/1.22G [21:02<22:57, 487kB/s][A[A
+Downloading (…)ch_model.safetensors:  16%|█▌        | 556M/3.44G [21:06<1:37:35, 492kB/s][A
+
+Downloading model.safetensors:  46%|████▌     | 556M/1.22G [21:08<20:53, 527kB/s][A[A
+Downloading (…)ch_model.safetensors:  16%|█▋        | 566M/3.44G [21:20<1:27:03, 550kB/s][A
+
+Downloading model.safetensors:  46%|████▌     | 556M/1.22G [21:22<20:53, 527kB/s][A[A
+
+Downloading model.safetensors:  47%|████▋     | 566M/1.22G [21:22<18:56, 572kB/s][A[A
+Downloading (…)ch_model.safetensors:  16%|█▋        | 566M/3.44G [21:34<1:27:03, 550kB/s][A
+
+Downloading model.safetensors:  47%|████▋     | 577M/1.22G [21:40<18:34, 573kB/s][A[A
+Downloading (…)ch_model.safetensors:  17%|█▋        | 577M/3.44G [21:43<1:31:45, 520kB/s][A
+Downloading (…)ch_model.safetensors:  17%|█▋        | 577M/3.44G [21:54<1:31:45, 520kB/s][A
+
+Downloading model.safetensors:  47%|████▋     | 577M/1.22G [21:52<18:34, 573kB/s][A[A
+
+Downloading model.safetensors:  48%|████▊     | 587M/1.22G [22:00<18:47, 558kB/s][A[A
+Downloading (…)ch_model.safetensors:  17%|█▋        | 587M/3.44G [22:03<1:30:36, 524kB/s][A
+Downloading (…)ch_model.safetensors:  17%|█▋        | 587M/3.44G [22:14<1:30:36, 524kB/s][A
+
+Downloading model.safetensors:  48%|████▊     | 587M/1.22G [22:12<18:47, 558kB/s][A[A
+
+Downloading model.safetensors:  49%|████▉     | 598M/1.22G [22:15<17:21, 594kB/s][A[A
+Downloading (…)ch_model.safetensors:  17%|█▋        | 598M/3.44G [22:19<1:24:57, 557kB/s][A
+Downloading (…)ch_model.safetensors:  18%|█▊        | 608M/3.44G [22:33<1:18:07, 604kB/s][A
+
+Downloading model.safetensors:  50%|█████     | 608M/1.22G [22:31<16:27, 616kB/s][A[A
+Downloading (…)ch_model.safetensors:  18%|█▊        | 608M/3.44G [22:44<1:18:07, 604kB/s][A
+
+Downloading model.safetensors:  50%|█████     | 608M/1.22G [22:42<16:27, 616kB/s][A[A
+Downloading (…)ch_model.safetensors:  18%|█▊        | 619M/3.44G [22:44<1:10:17, 669kB/s][A
+
+Downloading model.safetensors:  51%|█████     | 619M/1.22G [22:44<15:00, 664kB/s][A[A
+Downloading (…)ch_model.safetensors:  18%|█▊        | 629M/3.44G [22:57<1:05:26, 715kB/s][A
+
+Downloading model.safetensors:  52%|█████▏    | 629M/1.22G [22:57<14:00, 698kB/s][A[A
+Downloading (…)ch_model.safetensors:  19%|█▊        | 640M/3.44G [23:09<1:01:42, 756kB/s][A
+
+Downloading model.safetensors:  53%|█████▎    | 640M/1.22G [23:10<13:13, 726kB/s][A[A
+Downloading (…)ch_model.safetensors:  19%|█▉        | 650M/3.44G [23:18<55:59, 830kB/s]  [A
+
+Downloading model.safetensors:  53%|█████▎    | 640M/1.22G [23:22<13:13, 726kB/s][A[A
+
+Downloading model.safetensors:  53%|█████▎    | 650M/1.22G [23:23<12:40, 744kB/s][A[A
+Downloading (…)ch_model.safetensors:  19%|█▉        | 661M/3.44G [23:31<55:44, 831kB/s][A
+
+Downloading model.safetensors:  54%|█████▍    | 661M/1.22G [23:39<12:42, 729kB/s][A[A
+Downloading (…)ch_model.safetensors:  19%|█▉        | 661M/3.44G [23:44<55:44, 831kB/s][A
+Downloading (…)ch_model.safetensors:  20%|█▉        | 671M/3.44G [23:47<59:58, 769kB/s][A
+
+Downloading model.safetensors:  55%|█████▌    | 671M/1.22G [23:50<11:39, 779kB/s][A[A
+Downloading (…)ch_model.safetensors:  20%|█▉        | 682M/3.44G [24:01<59:43, 769kB/s][A
+
+Downloading model.safetensors:  55%|█████▌    | 671M/1.22G [24:02<11:39, 779kB/s][A[A
+
+Downloading model.safetensors:  56%|█████▌    | 682M/1.22G [24:04<11:34, 769kB/s][A[A
+Downloading (…)ch_model.safetensors:  20%|██        | 692M/3.44G [24:13<57:21, 798kB/s][A
+
+Downloading model.safetensors:  57%|█████▋    | 692M/1.22G [24:14<10:28, 833kB/s][A[A
+Downloading (…)ch_model.safetensors:  20%|██        | 692M/3.44G [24:24<57:21, 798kB/s][A
+Downloading (…)ch_model.safetensors:  20%|██        | 703M/3.44G [24:26<56:54, 801kB/s][A
+
+Downloading model.safetensors:  58%|█████▊    | 703M/1.22G [24:27<10:26, 820kB/s][A[A
+Downloading (…)ch_model.safetensors:  20%|██        | 703M/3.44G [24:44<56:54, 801kB/s][A
+
+Downloading model.safetensors:  58%|█████▊    | 703M/1.22G [24:42<10:26, 820kB/s][A[A
+Downloading (…)ch_model.safetensors:  21%|██        | 713M/3.44G [24:44<1:03:50, 711kB/s][A
+
+Downloading model.safetensors:  59%|█████▊    | 713M/1.22G [24:53<13:24, 625kB/s][A[A
+Downloading (…)ch_model.safetensors:  21%|██        | 724M/3.44G [24:59<1:04:16, 704kB/s][A
+
+Downloading model.safetensors:  60%|█████▉    | 724M/1.22G [25:08<12:40, 647kB/s][A[A
+Downloading (…)ch_model.safetensors:  21%|██▏       | 734M/3.44G [25:14<1:03:33, 709kB/s][A
+
+Downloading model.safetensors:  60%|██████    | 734M/1.22G [25:18<11:02, 728kB/s][A[A
+Downloading (…)ch_model.safetensors:  21%|██▏       | 734M/3.44G [25:24<1:03:33, 709kB/s][A
+Downloading (…)ch_model.safetensors:  22%|██▏       | 744M/3.44G [25:28<1:02:47, 715kB/s][A
+
+Downloading model.safetensors:  61%|██████    | 744M/1.22G [25:27<09:29, 828kB/s][A[A
+Downloading (…)ch_model.safetensors:  22%|██▏       | 744M/3.44G [25:44<1:02:47, 715kB/s][A
+
+Downloading model.safetensors:  61%|██████    | 744M/1.22G [25:42<09:29, 828kB/s][A[A
+Downloading (…)ch_model.safetensors:  22%|██▏       | 755M/3.44G [25:45<1:05:06, 687kB/s][A
+
+Downloading model.safetensors:  62%|██████▏   | 755M/1.22G [25:50<11:32, 666kB/s][A[A
+Downloading (…)ch_model.safetensors:  22%|██▏       | 765M/3.44G [25:59<1:03:10, 705kB/s][A
+
+Downloading model.safetensors:  62%|██████▏   | 755M/1.22G [26:02<11:32, 666kB/s][A[A
+
+Downloading model.safetensors:  63%|██████▎   | 765M/1.22G [26:06<11:14, 668kB/s][A[A
+Downloading (…)ch_model.safetensors:  23%|██▎       | 776M/3.44G [26:09<56:08, 790kB/s]  [A
+
+Downloading model.safetensors:  64%|██████▍   | 776M/1.22G [26:15<09:42, 756kB/s][A[A
+Downloading (…)ch_model.safetensors:  23%|██▎       | 786M/3.44G [26:18<51:17, 862kB/s][A
+
+Downloading model.safetensors:  65%|██████▍   | 786M/1.22G [26:24<08:31, 839kB/s][A[A
+Downloading (…)ch_model.safetensors:  23%|██▎       | 797M/3.44G [26:34<55:33, 792kB/s][A
+
+Downloading model.safetensors:  66%|██████▌   | 797M/1.22G [26:33<07:37, 917kB/s][A[A
+Downloading (…)ch_model.safetensors:  23%|██▎       | 807M/3.44G [26:43<50:29, 869kB/s][A
+
+Downloading model.safetensors:  66%|██████▋   | 807M/1.22G [26:41<06:46, 1.01MB/s][A[A
+
+Downloading model.safetensors:  67%|██████▋   | 818M/1.22G [26:51<06:22, 1.04MB/s][A[A
+Downloading (…)ch_model.safetensors:  23%|██▎       | 807M/3.44G [26:54<50:29, 869kB/s][A
+Downloading (…)ch_model.safetensors:  24%|██▍       | 818M/3.44G [26:55<49:22, 885kB/s][A
+
+Downloading model.safetensors:  67%|██████▋   | 818M/1.22G [27:02<06:22, 1.04MB/s][A[A
+
+Downloading model.safetensors:  68%|██████▊   | 828M/1.22G [27:03<06:31, 989kB/s] [A[A
+Downloading (…)ch_model.safetensors:  24%|██▍       | 828M/3.44G [27:06<48:47, 891kB/s][A
+
+Downloading model.safetensors:  69%|██████▉   | 839M/1.22G [27:10<05:48, 1.08MB/s][A[A
+Downloading (…)ch_model.safetensors:  24%|██▍       | 839M/3.44G [27:15<44:48, 967kB/s][A
+
+Downloading model.safetensors:  70%|██████▉   | 849M/1.22G [27:19<05:28, 1.11MB/s][A[A
+Downloading (…)ch_model.safetensors:  25%|██▍       | 849M/3.44G [27:24<42:03, 1.03MB/s][A
+
+Downloading model.safetensors:  71%|███████   | 860M/1.22G [27:26<04:58, 1.19MB/s][A[A
+Downloading (…)ch_model.safetensors:  25%|██▌       | 860M/3.44G [27:34<41:55, 1.02MB/s][A
+
+Downloading model.safetensors:  72%|███████▏  | 870M/1.22G [27:38<05:14, 1.10MB/s][A[A
+Downloading (…)ch_model.safetensors:  25%|██▌       | 860M/3.44G [27:44<41:55, 1.02MB/s][A
+Downloading (…)ch_model.safetensors:  25%|██▌       | 870M/3.44G [27:44<42:12, 1.01MB/s][A
+
+Downloading model.safetensors:  72%|███████▏  | 881M/1.22G [27:49<05:21, 1.04MB/s][A[A
+Downloading (…)ch_model.safetensors:  26%|██▌       | 881M/3.44G [27:57<44:25, 960kB/s] [A
+
+Downloading model.safetensors:  73%|███████▎  | 891M/1.22G [28:00<05:25, 998kB/s] [A[A
+Downloading (…)ch_model.safetensors:  26%|██▌       | 891M/3.44G [28:07<43:54, 967kB/s][A
+
+Downloading model.safetensors:  74%|███████▍  | 902M/1.22G [28:08<04:48, 1.09MB/s][A[A
+Downloading (…)ch_model.safetensors:  26%|██▌       | 902M/3.44G [28:15<39:21, 1.07MB/s][A
+
+Downloading model.safetensors:  75%|███████▌  | 912M/1.22G [28:16<04:22, 1.16MB/s][A[A
+Downloading (…)ch_model.safetensors:  27%|██▋       | 912M/3.44G [28:23<38:07, 1.10MB/s][A
+
+Downloading model.safetensors:  76%|███████▌  | 923M/1.22G [28:24<04:08, 1.18MB/s][A[A
+Downloading (…)ch_model.safetensors:  27%|██▋       | 912M/3.44G [28:34<38:07, 1.10MB/s][A
+Downloading (…)ch_model.safetensors:  27%|██▋       | 923M/3.44G [28:38<44:21, 945kB/s] [A
+
+Downloading model.safetensors:  77%|███████▋  | 933M/1.22G [28:38<04:38, 1.02MB/s][A[A
+Downloading (…)ch_model.safetensors:  27%|██▋       | 933M/3.44G [28:53<48:14, 866kB/s][A
+
+Downloading model.safetensors:  77%|███████▋  | 933M/1.22G [28:52<04:38, 1.02MB/s][A[A
+
+Downloading model.safetensors:  78%|███████▊  | 944M/1.22G [28:52<05:01, 902kB/s] [A[A
+Downloading (…)ch_model.safetensors:  27%|██▋       | 933M/3.44G [29:04<48:14, 866kB/s][A
+Downloading (…)ch_model.safetensors:  27%|██▋       | 944M/3.44G [29:09<52:28, 792kB/s][A
+
+Downloading model.safetensors:  78%|███████▊  | 954M/1.22G [29:07<05:09, 846kB/s][A[A
+Downloading (…)ch_model.safetensors:  28%|██▊       | 954M/3.44G [29:19<48:15, 858kB/s][A
+
+Downloading model.safetensors:  79%|███████▉  | 965M/1.22G [29:19<04:55, 851kB/s][A[A
+Downloading (…)ch_model.safetensors:  28%|██▊       | 965M/3.44G [29:30<47:11, 874kB/s][A
+
+Downloading model.safetensors:  79%|███████▉  | 965M/1.22G [29:32<04:55, 851kB/s][A[A
+
+Downloading model.safetensors:  80%|████████  | 975M/1.22G [29:32<04:50, 829kB/s][A[A
+Downloading (…)ch_model.safetensors:  28%|██▊       | 975M/3.44G [29:41<45:43, 898kB/s][A
+
+Downloading model.safetensors:  81%|████████  | 986M/1.22G [29:46<04:47, 800kB/s][A[A
+Downloading (…)ch_model.safetensors:  29%|██▊       | 986M/3.44G [29:50<42:05, 971kB/s][A
+
+Downloading model.safetensors:  82%|████████▏ | 996M/1.22G [29:59<04:33, 804kB/s][A[A
+Downloading (…)ch_model.safetensors:  29%|██▊       | 986M/3.44G [30:04<42:05, 971kB/s][A
+Downloading (…)ch_model.safetensors:  29%|██▉       | 996M/3.44G [30:05<47:27, 858kB/s][A
+
+Downloading model.safetensors:  83%|████████▎ | 1.01G/1.22G [30:09<04:00, 869kB/s][A[A
+Downloading (…)ch_model.safetensors:  29%|██▉       | 1.01G/3.44G [30:15<44:40, 907kB/s][A
+
+Downloading model.safetensors:  84%|████████▎ | 1.02G/1.22G [30:17<03:25, 968kB/s][A[A
+Downloading (…)ch_model.safetensors:  30%|██▉       | 1.02G/3.44G [30:28<46:26, 869kB/s][A
+
+Downloading model.safetensors:  85%|████████▍ | 1.03G/1.22G [30:27<03:11, 984kB/s][A[A
+Downloading (…)ch_model.safetensors:  30%|██▉       | 1.03G/3.44G [30:40<45:09, 890kB/s][A
+
+Downloading model.safetensors:  85%|████████▌ | 1.04G/1.22G [30:38<03:00, 983kB/s][A[A
+Downloading (…)ch_model.safetensors:  30%|███       | 1.04G/3.44G [30:50<43:28, 920kB/s][A
+
+Downloading model.safetensors:  86%|████████▌ | 1.05G/1.22G [30:48<02:49, 988kB/s][A[A
+Downloading (…)ch_model.safetensors:  30%|███       | 1.05G/3.44G [31:02<43:34, 914kB/s][A
+
+Downloading model.safetensors:  87%|████████▋ | 1.06G/1.22G [31:00<02:41, 971kB/s][A[A
+Downloading (…)ch_model.safetensors:  31%|███       | 1.06G/3.44G [31:12<42:08, 941kB/s][A
+
+Downloading model.safetensors:  88%|████████▊ | 1.07G/1.22G [31:12<02:37, 932kB/s][A[A
+Downloading (…)ch_model.safetensors:  31%|███       | 1.07G/3.44G [31:23<41:23, 954kB/s][A
+
+Downloading model.safetensors:  88%|████████▊ | 1.07G/1.22G [31:22<02:37, 932kB/s][A[A
+
+Downloading model.safetensors:  89%|████████▉ | 1.08G/1.22G [31:27<02:42, 838kB/s][A[A
+Downloading (…)ch_model.safetensors:  31%|███       | 1.07G/3.44G [31:34<41:23, 954kB/s][A
+Downloading (…)ch_model.safetensors:  31%|███▏      | 1.08G/3.44G [31:40<48:04, 818kB/s][A
+
+Downloading model.safetensors:  90%|████████▉ | 1.09G/1.22G [31:41<02:34, 812kB/s][A[A
+
+Downloading model.safetensors:  91%|█████████ | 1.10G/1.22G [31:50<02:08, 896kB/s][A[A
+Downloading (…)ch_model.safetensors:  31%|███▏      | 1.08G/3.44G [31:54<48:04, 818kB/s][A
+Downloading (…)ch_model.safetensors:  32%|███▏      | 1.09G/3.44G [31:56<51:01, 767kB/s][A
+
+Downloading model.safetensors:  91%|█████████▏| 1.11G/1.22G [32:00<01:51, 937kB/s][A[A
+Downloading (…)ch_model.safetensors:  32%|███▏      | 1.10G/3.44G [32:11<52:27, 743kB/s][A
+
+Downloading model.safetensors:  92%|█████████▏| 1.12G/1.22G [32:11<01:38, 952kB/s][A[A
+
+Downloading model.safetensors:  93%|█████████▎| 1.13G/1.22G [32:20<01:22, 1.01MB/s][A[A
+Downloading (…)ch_model.safetensors:  32%|███▏      | 1.11G/3.44G [32:22<49:01, 791kB/s][A
+
+Downloading model.safetensors:  94%|█████████▍| 1.14G/1.22G [32:29<01:09, 1.06MB/s][A[A
+Downloading (…)ch_model.safetensors:  33%|███▎      | 1.12G/3.44G [32:31<44:41, 864kB/s][A
+Downloading (…)ch_model.safetensors:  33%|███▎      | 1.13G/3.44G [32:40<40:02, 960kB/s][A
+
+Downloading model.safetensors:  95%|█████████▍| 1.15G/1.22G [32:39<01:00, 1.03MB/s][A[A
+Downloading (…)ch_model.safetensors:  33%|███▎      | 1.14G/3.44G [32:47<35:46, 1.07MB/s][A
+
+Downloading model.safetensors:  96%|█████████▌| 1.16G/1.22G [32:47<00:47, 1.10MB/s][A[A
+Downloading (…)ch_model.safetensors:  34%|███▎      | 1.15G/3.44G [32:54<33:16, 1.14MB/s][A
+
+Downloading model.safetensors:  97%|█████████▋| 1.17G/1.22G [32:57<00:37, 1.10MB/s][A[A
+Downloading (…)ch_model.safetensors:  34%|███▍      | 1.16G/3.44G [33:02<31:19, 1.21MB/s][A
+
+Downloading model.safetensors:  97%|█████████▋| 1.18G/1.22G [33:04<00:26, 1.18MB/s][A[A
+Downloading (…)ch_model.safetensors:  34%|███▍      | 1.17G/3.44G [33:10<30:49, 1.22MB/s][A
+
+Downloading model.safetensors:  98%|█████████▊| 1.20G/1.22G [33:13<00:17, 1.19MB/s][A[A
+Downloading (…)ch_model.safetensors:  34%|███▍      | 1.18G/3.44G [33:17<28:50, 1.30MB/s][A
+
+Downloading model.safetensors:  99%|█████████▉| 1.21G/1.22G [33:20<00:08, 1.25MB/s][A[A
+Downloading (…)ch_model.safetensors:  35%|███▍      | 1.20G/3.44G [33:24<27:13, 1.37MB/s][A
+Downloading (…)ch_model.safetensors:  35%|███▌      | 1.21G/3.44G [33:30<25:33, 1.46MB/s][A
+
+Downloading model.safetensors: 100%|██████████| 1.22G/1.22G [33:28<00:00, 1.26MB/s][A[ADownloading model.safetensors: 100%|██████████| 1.22G/1.22G [33:28<00:00, 605kB/s] 
+Fetching 15 files:  27%|██▋       | 4/15 [33:36<1:32:24, 504.07s/it]
+Downloading (…)ch_model.safetensors:  35%|███▌      | 1.22G/3.44G [33:38<26:42, 1.39MB/s][A
+Downloading (…)ch_model.safetensors:  36%|███▌      | 1.23G/3.44G [33:45<26:04, 1.41MB/s][A
+Downloading (…)ch_model.safetensors:  36%|███▌      | 1.24G/3.44G [33:51<24:24, 1.50MB/s][A
+Downloading (…)ch_model.safetensors:  36%|███▋      | 1.25G/3.44G [33:58<23:48, 1.53MB/s][A
+Downloading (…)ch_model.safetensors:  37%|███▋      | 1.26G/3.44G [34:05<23:29, 1.55MB/s][A
+Downloading (…)ch_model.safetensors:  37%|███▋      | 1.27G/3.44G [34:11<22:59, 1.57MB/s][A
+Downloading (…)ch_model.safetensors:  37%|███▋      | 1.28G/3.44G [34:20<25:31, 1.41MB/s][A
+Downloading (…)ch_model.safetensors:  38%|███▊      | 1.29G/3.44G [34:30<27:30, 1.30MB/s][A
+Downloading (…)ch_model.safetensors:  38%|███▊      | 1.29G/3.44G [34:44<27:30, 1.30MB/s][A
+Downloading (…)ch_model.safetensors:  38%|███▊      | 1.30G/3.44G [34:49<39:02, 913kB/s] [A
+Downloading (…)ch_model.safetensors:  38%|███▊      | 1.31G/3.44G [35:03<40:43, 871kB/s][A
+Downloading (…)ch_model.safetensors:  38%|███▊      | 1.32G/3.44G [35:12<37:43, 935kB/s][A
+Downloading (…)ch_model.safetensors:  39%|███▊      | 1.33G/3.44G [35:20<34:40, 1.01MB/s][A
+Downloading (…)ch_model.safetensors:  39%|███▊      | 1.33G/3.44G [35:34<34:40, 1.01MB/s][A
+Downloading (…)ch_model.safetensors:  39%|███▉      | 1.34G/3.44G [35:35<38:36, 905kB/s] [A
+Downloading (…)ch_model.safetensors:  39%|███▉      | 1.35G/3.44G [35:49<40:57, 849kB/s][A
+Downloading (…)ch_model.safetensors:  40%|███▉      | 1.36G/3.44G [36:01<40:30, 854kB/s][A
+Downloading (…)ch_model.safetensors:  40%|███▉      | 1.37G/3.44G [36:10<37:38, 914kB/s][A
+Downloading (…)ch_model.safetensors:  40%|████      | 1.38G/3.44G [36:23<38:29, 889kB/s][A
+Downloading (…)ch_model.safetensors:  40%|████      | 1.38G/3.44G [36:34<38:29, 889kB/s][A
+Downloading (…)ch_model.safetensors:  41%|████      | 1.39G/3.44G [36:45<48:30, 702kB/s][A
+Downloading (…)ch_model.safetensors:  41%|████      | 1.39G/3.44G [37:04<48:30, 702kB/s][A
+Downloading (…)ch_model.safetensors:  41%|████      | 1.41G/3.44G [37:12<59:27, 570kB/s][A
+Downloading (…)ch_model.safetensors:  41%|████      | 1.41G/3.44G [37:24<59:27, 570kB/s][A
+Downloading (…)ch_model.safetensors:  41%|████      | 1.42G/3.44G [37:34<1:02:41, 538kB/s][A
+Downloading (…)ch_model.safetensors:  41%|████      | 1.42G/3.44G [37:44<1:02:41, 538kB/s][A
+Downloading (…)ch_model.safetensors:  41%|████▏     | 1.43G/3.44G [37:56<1:04:42, 518kB/s][A
+Downloading (…)ch_model.safetensors:  42%|████▏     | 1.44G/3.44G [38:12<1:00:42, 550kB/s][A
+Downloading (…)ch_model.safetensors:  42%|████▏     | 1.44G/3.44G [38:24<1:00:42, 550kB/s][A
+Downloading (…)ch_model.safetensors:  42%|████▏     | 1.45G/3.44G [38:40<1:08:38, 483kB/s][A
+Downloading (…)ch_model.safetensors:  42%|████▏     | 1.45G/3.44G [38:54<1:08:38, 483kB/s][A
+Downloading (…)ch_model.safetensors:  42%|████▏     | 1.46G/3.44G [38:56<1:03:27, 520kB/s][A
+Downloading (…)ch_model.safetensors:  43%|████▎     | 1.47G/3.44G [39:12<58:55, 557kB/s]  [A
+Downloading (…)ch_model.safetensors:  43%|████▎     | 1.47G/3.44G [39:24<58:55, 557kB/s][A
+Downloading (…)ch_model.safetensors:  43%|████▎     | 1.48G/3.44G [39:34<1:01:27, 532kB/s][A
+Downloading (…)ch_model.safetensors:  43%|████▎     | 1.48G/3.44G [39:44<1:01:27, 532kB/s][A
+Downloading (…)ch_model.safetensors:  43%|████▎     | 1.49G/3.44G [39:59<1:06:03, 492kB/s][A
+Downloading (…)ch_model.safetensors:  43%|████▎     | 1.49G/3.44G [40:14<1:06:03, 492kB/s][A
+Downloading (…)ch_model.safetensors:  44%|████▎     | 1.50G/3.44G [40:28<1:13:06, 442kB/s][A
+Downloading (…)ch_model.safetensors:  44%|████▎     | 1.50G/3.44G [40:44<1:13:06, 442kB/s][A
+Downloading (…)ch_model.safetensors:  44%|████▍     | 1.51G/3.44G [40:49<1:09:59, 459kB/s][A
+Downloading (…)ch_model.safetensors:  44%|████▍     | 1.51G/3.44G [41:04<1:09:59, 459kB/s][A
+Downloading (…)ch_model.safetensors:  44%|████▍     | 1.52G/3.44G [41:08<1:05:40, 487kB/s][A
+Downloading (…)ch_model.safetensors:  44%|████▍     | 1.52G/3.44G [41:24<1:05:40, 487kB/s][A
+Downloading (…)ch_model.safetensors:  45%|████▍     | 1.53G/3.44G [41:25<1:01:14, 519kB/s][A
+Downloading (…)ch_model.safetensors:  45%|████▍     | 1.54G/3.44G [41:40<56:26, 560kB/s]  [A
+Downloading (…)ch_model.safetensors:  45%|████▍     | 1.54G/3.44G [41:54<56:26, 560kB/s][A
+Downloading (…)ch_model.safetensors:  45%|████▌     | 1.55G/3.44G [41:58<55:22, 568kB/s][A
+Downloading (…)ch_model.safetensors:  45%|████▌     | 1.55G/3.44G [42:14<55:22, 568kB/s][A
+Downloading (…)ch_model.safetensors:  45%|████▌     | 1.56G/3.44G [42:15<53:51, 580kB/s][A
+Downloading (…)ch_model.safetensors:  45%|████▌     | 1.56G/3.44G [42:34<53:51, 580kB/s][A
+Downloading (…)ch_model.safetensors:  46%|████▌     | 1.57G/3.44G [42:43<1:02:05, 501kB/s][A
+Downloading (…)ch_model.safetensors:  46%|████▌     | 1.57G/3.44G [42:54<1:02:05, 501kB/s][A
+Downloading (…)ch_model.safetensors:  46%|████▌     | 1.58G/3.44G [43:20<1:15:58, 407kB/s][A
+Downloading (…)ch_model.safetensors:  46%|████▌     | 1.58G/3.44G [43:34<1:15:58, 407kB/s][A
+Downloading (…)ch_model.safetensors:  46%|████▋     | 1.59G/3.44G [43:46<1:16:20, 403kB/s][A
+Downloading (…)ch_model.safetensors:  46%|████▋     | 1.59G/3.44G [44:04<1:16:20, 403kB/s][A
+Downloading (…)ch_model.safetensors:  47%|████▋     | 1.60G/3.44G [44:10<1:13:57, 413kB/s][A
+Downloading (…)ch_model.safetensors:  47%|████▋     | 1.60G/3.44G [44:24<1:13:57, 413kB/s][A
+Downloading (…)ch_model.safetensors:  47%|████▋     | 1.61G/3.44G [44:40<1:16:58, 395kB/s][A
+Downloading (…)ch_model.safetensors:  47%|████▋     | 1.61G/3.44G [44:54<1:16:58, 395kB/s][A
+Downloading (…)ch_model.safetensors:  47%|████▋     | 1.63G/3.44G [45:10<1:19:49, 379kB/s][A
+Downloading (…)ch_model.safetensors:  47%|████▋     | 1.63G/3.44G [45:24<1:19:49, 379kB/s][A
+Downloading (…)ch_model.safetensors:  48%|████▊     | 1.64G/3.44G [45:26<1:08:57, 436kB/s][A
+Downloading (…)ch_model.safetensors:  48%|████▊     | 1.64G/3.44G [45:44<1:08:57, 436kB/s][A
+Downloading (…)ch_model.safetensors:  48%|████▊     | 1.65G/3.44G [45:53<1:11:31, 418kB/s][A
+Downloading (…)ch_model.safetensors:  48%|████▊     | 1.65G/3.44G [46:04<1:11:31, 418kB/s][A
+Downloading (…)ch_model.safetensors:  48%|████▊     | 1.66G/3.44G [46:15<1:08:43, 432kB/s][A
+Downloading (…)ch_model.safetensors:  48%|████▊     | 1.66G/3.44G [46:34<1:08:43, 432kB/s][A
+Downloading (…)ch_model.safetensors:  48%|████▊     | 1.67G/3.44G [46:45<1:13:08, 404kB/s][A
+Downloading (…)ch_model.safetensors:  48%|████▊     | 1.67G/3.44G [47:04<1:13:08, 404kB/s][A
+Downloading (…)ch_model.safetensors:  49%|████▉     | 1.68G/3.44G [47:12<1:13:17, 400kB/s][A
+Downloading (…)ch_model.safetensors:  49%|████▉     | 1.68G/3.44G [47:24<1:13:17, 400kB/s][A
+Downloading (…)ch_model.safetensors:  49%|████▉     | 1.69G/3.44G [47:37<1:12:02, 405kB/s][A
+Downloading (…)ch_model.safetensors:  49%|████▉     | 1.69G/3.44G [47:54<1:12:02, 405kB/s][A
+Downloading (…)ch_model.safetensors:  49%|████▉     | 1.70G/3.44G [48:00<1:09:06, 419kB/s][A
+Downloading (…)ch_model.safetensors:  49%|████▉     | 1.70G/3.44G [48:14<1:09:06, 419kB/s][A
+Downloading (…)ch_model.safetensors:  50%|████▉     | 1.71G/3.44G [48:25<1:08:31, 421kB/s][A
+Downloading (…)ch_model.safetensors:  50%|████▉     | 1.71G/3.44G [48:44<1:08:31, 421kB/s][A
+Downloading (…)ch_model.safetensors:  50%|█████     | 1.72G/3.44G [48:48<1:06:31, 431kB/s][A
+Downloading (…)ch_model.safetensors:  50%|█████     | 1.72G/3.44G [49:04<1:06:31, 431kB/s][A
+Downloading (…)ch_model.safetensors:  50%|█████     | 1.73G/3.44G [49:22<1:13:42, 386kB/s][A
+Downloading (…)ch_model.safetensors:  50%|█████     | 1.73G/3.44G [49:34<1:13:42, 386kB/s][A
+Downloading (…)ch_model.safetensors:  51%|█████     | 1.74G/3.44G [49:55<1:18:13, 362kB/s][A
+Downloading (…)ch_model.safetensors:  51%|█████     | 1.74G/3.44G [50:14<1:18:13, 362kB/s][A
+Downloading (…)ch_model.safetensors:  51%|█████     | 1.75G/3.44G [50:36<1:27:45, 320kB/s][A
+Downloading (…)ch_model.safetensors:  51%|█████     | 1.75G/3.44G [50:54<1:27:45, 320kB/s][A
+Downloading (…)ch_model.safetensors:  51%|█████     | 1.76G/3.44G [51:40<1:51:53, 250kB/s][A
+Downloading (…)ch_model.safetensors:  51%|█████     | 1.76G/3.44G [51:54<1:51:53, 250kB/s][A
+Downloading (…)ch_model.safetensors:  52%|█████▏    | 1.77G/3.44G [52:33<2:00:09, 231kB/s][A
+Downloading (…)ch_model.safetensors:  52%|█████▏    | 1.77G/3.44G [52:44<2:00:09, 231kB/s][A
+Downloading (…)ch_model.safetensors:  52%|█████▏    | 1.78G/3.44G [53:28<2:06:54, 217kB/s][A
+Downloading (…)ch_model.safetensors:  52%|█████▏    | 1.78G/3.44G [53:44<2:06:54, 217kB/s][AFetching 15 files:  80%|████████  | 12/15 [54:14<13:33, 271.17s/it] 
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/urllib3/response.py", line 712, in _error_catcher
+    yield
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/urllib3/response.py", line 812, in _raw_read
+    data = self._fp_read(amt) if not fp_closed else b""
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/urllib3/response.py", line 797, in _fp_read
+    return self._fp.read(amt) if amt is not None else self._fp.read()
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/http/client.py", line 465, in read
+    n = self.readinto(b)
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/http/client.py", line 509, in readinto
+    n = self.fp.readinto(b)
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/socket.py", line 589, in readinto
+    return self._sock.recv_into(b)
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/ssl.py", line 1071, in recv_into
+    return self.read(nbytes, buffer)
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/ssl.py", line 929, in read
+    return self._sslobj.read(len, buffer)
+socket.timeout: The read operation timed out
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/requests/models.py", line 816, in generate
+    yield from self.raw.stream(chunk_size, decode_content=True)
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/urllib3/response.py", line 934, in stream
+    data = self.read(amt=amt, decode_content=decode_content)
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/urllib3/response.py", line 877, in read
+    data = self._raw_read(amt)
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/urllib3/response.py", line 833, in _raw_read
+    raise IncompleteRead(self._fp_bytes_read, self.length_remaining)
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/contextlib.py", line 130, in __exit__
+    self.gen.throw(type, value, traceback)
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/urllib3/response.py", line 717, in _error_catcher
+    raise ReadTimeoutError(self._pool, None, "Read timed out.") from e  # type: ignore[arg-type]
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='cdn-lfs.huggingface.co', port=443): Read timed out.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/autodl-tmp/gaussian-splatting/models/control_net.py", line 59, in <module>
+    pretrained_model_name_or_path, torch_dtype=torch.float16, use_safetensors=True
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/diffusers/pipelines/pipeline_utils.py", line 955, in from_pretrained
+    **kwargs,
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/diffusers/pipelines/pipeline_utils.py", line 1609, in download
+    user_agent=user_agent,
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/huggingface_hub/_snapshot_download.py", line 241, in snapshot_download
+    tqdm_class=tqdm_class or hf_tqdm,
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/tqdm/contrib/concurrent.py", line 69, in thread_map
+    return _executor_map(ThreadPoolExecutor, fn, *iterables, **tqdm_kwargs)
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/tqdm/contrib/concurrent.py", line 51, in _executor_map
+    return list(tqdm_class(ex.map(fn, *iterables, chunksize=chunksize), **kwargs))
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/tqdm/std.py", line 1182, in __iter__
+    for obj in iterable:
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/concurrent/futures/_base.py", line 598, in result_iterator
+    yield fs.pop().result()
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/concurrent/futures/_base.py", line 435, in result
+    return self.__get_result()
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/concurrent/futures/_base.py", line 384, in __get_result
+    raise self._exception
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/concurrent/futures/thread.py", line 57, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/huggingface_hub/_snapshot_download.py", line 226, in _inner_hf_hub_download
+    token=token,
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/huggingface_hub/utils/_validators.py", line 118, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/huggingface_hub/file_download.py", line 1370, in hf_hub_download
+    expected_size=expected_size,
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/huggingface_hub/file_download.py", line 541, in http_get
+    for chunk in r.iter_content(chunk_size=10 * 1024 * 1024):
+  File "/root/miniconda3/envs/gaussian_splatting/lib/python3.7/site-packages/requests/models.py", line 822, in generate
+    raise ConnectionError(e)
+requests.exceptions.ConnectionError: HTTPSConnectionPool(host='cdn-lfs.huggingface.co', port=443): Read timed out.
+Downloading (…)ch_model.safetensors:  52%|█████▏    | 1.78G/3.44G [54:08<50:17, 549kB/s]  python: can't open file 'main_classify.py': [Errno 2] No such file or directory

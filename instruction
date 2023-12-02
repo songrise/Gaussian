@@ -1,0 +1,2 @@
+python render.py -m /root/autodl-tmp/gaussian-splatting/output/c274275d-7 -s /root/autodl-tmp/gaussian-splatting/data/truck
+nohup tensorboard --logdir /root/autodl-tmp/gaussian-splatting/output &

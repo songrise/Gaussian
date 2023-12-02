@@ -22,20 +22,91 @@ from tqdm import tqdm
 from utils.image_utils import psnr
 from argparse import ArgumentParser, Namespace
 from arguments import ModelParams, PipelineParams, OptimizationParams
+import clip
+from torchvision import transforms
 try:
     from torch.utils.tensorboard import SummaryWriter
     TENSORBOARD_FOUND = True
 except ImportError:
     TENSORBOARD_FOUND = False
 
+
+import torch
+import torch.nn as nn
+from torchvision.models import vgg16
+
+__all__ = ['VGGPerceptualLoss']
+
+from torchvision.models import vgg16
+# VGG loss, Cite from https://gist.github.com/alper111/8233cdb0414b4cb5853f2f730ab95a49
+class VGGPerceptualLoss(nn.Module):
+    def __init__(self, resize=True):
+        super(VGGPerceptualLoss, self).__init__()
+        blocks = []
+        blocks.append(vgg16(pretrained=True).features[:4].eval())
+        blocks.append(vgg16(pretrained=True).features[4:9].eval())
+        # 4.21 can wang
+        blocks.append(vgg16(pretrained=True).features[9:16].eval())
+        # 4.19 can wang
+        blocks.append(vgg16(pretrained=True).features[16:23].eval())
+        for bl in blocks:
+            for p in bl:
+                p.requires_grad = False
+        self.blocks = nn.ModuleList(blocks)
+        self.transform = nn.functional.interpolate
+        self.mean = nn.Parameter(torch.tensor([0.485, 0.456, 0.406]).view(1,3,1,1))
+        self.std = nn.Parameter(torch.tensor([0.229, 0.224, 0.225]).view(1,3,1,1))
+        self.resize = resize
+
+    def forward(self, input, target, feature_layers=[0, 1, 2, 3]):
+        if input.shape[1] != 3:
+            input = input.repeat(1, 3, 1, 1)
+            target = target.repeat(1, 3, 1, 1)
+
+        #print ("=============")
+        #print (input.min())
+        #print ("=============")
+        #print (target.min())
+
+        # normalize [-1, 1] to [0, 1] first
+        #input = (input + 1) / 2
+        #target = (target + 1) / 2
+
+        input = (input-self.mean) / self.std
+        target = (target-self.mean) / self.std
+        if self.resize:
+            input = self.transform(input, mode='bilinear', size=(224, 224), align_corners=False)
+            target = self.transform(target, mode='bilinear', size=(224, 224), align_corners=False)
+        loss = 0.0
+        x = input
+        y = target
+        for i, block in enumerate(self.blocks):
+            x = block(x)
+            y = block(y)
+            if i == 2:
+            #if i == 1:
+            #if i in feature_layers: # for 421_0
+                loss += torch.nn.functional.l1_loss(x, y)
+        return loss
+
+
+
+
 def training(dataset, opt, pipe, testing_iterations, saving_iterations, checkpoint_iterations, checkpoint, debug_from):
     first_iter = 0
     tb_writer = prepare_output_and_logger(dataset)
     gaussians = GaussianModel(dataset.sh_degree)
     scene = Scene(dataset, gaussians)
+    gaussians._xyz.requires_grad = False
+    gaussians._rotation.requires_grad = False
+    gaussians._scaling.requires_grad = False
+
+    clip_model = clip.load("ViT-B/16", jit=False)[0].eval().requires_grad_(False).to("cuda")
+    perceptual = VGGPerceptualLoss().to("cuda")
+    img_reshpae = transforms.Resize((224, 224))
     gaussians.training_setup(opt)
     if checkpoint:
-        (model_params, first_iter) = torch.load(checkpoint)
+        (model_params, _) = torch.load(checkpoint)
         gaussians.restore(model_params, opt)
 
     bg_color = [1, 1, 1] if dataset.white_background else [0, 0, 0]
@@ -88,8 +159,15 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations, checkpoi
 
         # Loss
         gt_image = viewpoint_cam.original_image.cuda()
-        Ll1 = l1_loss(image, gt_image)
-        loss = (1.0 - opt.lambda_dssim) * Ll1 + opt.lambda_dssim * (1.0 - ssim(image, gt_image))
+        #CLIP-loss
+        image = img_reshpae(image).unsqueeze(0)
+        image_embed = clip_model.encode_image(image)
+        text = "a starry night painting"
+        text_embed = clip_model.encode_text(clip.tokenize(text).cuda())
+        loss = 1. -torch.cosine_similarity(image_embed, text_embed).mean()
+        perceptual_loss = perceptual(image, gt_image)
+        loss = loss + perceptual_loss
+
         loss.backward()
 
         iter_end.record()
@@ -104,23 +182,24 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations, checkpoi
                 progress_bar.close()
 
             # Log and save
-            training_report(tb_writer, iteration, Ll1, loss, l1_loss, iter_start.elapsed_time(iter_end), testing_iterations, scene, render, (pipe, background))
+            training_report(tb_writer, iteration, l1_loss, iter_start.elapsed_time(iter_end), testing_iterations, scene, render, (pipe, background))
             if (iteration in saving_iterations):
                 print("\n[ITER {}] Saving Gaussians".format(iteration))
                 scene.save(iteration)
 
             # Densification
-            if iteration < opt.densify_until_iter:
-                # Keep track of max radii in image-space for pruning
-                gaussians.max_radii2D[visibility_filter] = torch.max(gaussians.max_radii2D[visibility_filter], radii[visibility_filter])
-                gaussians.add_densification_stats(viewspace_point_tensor, visibility_filter)
+            if False:
+                if iteration < opt.densify_until_iter:
+                    # Keep track of max radii in image-space for pruning
+                    gaussians.max_radii2D[visibility_filter] = torch.max(gaussians.max_radii2D[visibility_filter], radii[visibility_filter])
+                    gaussians.add_densification_stats(viewspace_point_tensor, visibility_filter)
 
-                if iteration > opt.densify_from_iter and iteration % opt.densification_interval == 0:
-                    size_threshold = 20 if iteration > opt.opacity_reset_interval else None
-                    gaussians.densify_and_prune(opt.densify_grad_threshold, 0.005, scene.cameras_extent, size_threshold)
-                
-                if iteration % opt.opacity_reset_interval == 0 or (dataset.white_background and iteration == opt.densify_from_iter):
-                    gaussians.reset_opacity()
+                    if iteration > opt.densify_from_iter and iteration % opt.densification_interval == 0:
+                        size_threshold = 20 if iteration > opt.opacity_reset_interval else None
+                        gaussians.densify_and_prune(opt.densify_grad_threshold, 0.005, scene.cameras_extent, size_threshold)
+                    
+                    if iteration % opt.opacity_reset_interval == 0 or (dataset.white_background and iteration == opt.densify_from_iter):
+                        gaussians.reset_opacity()
 
             # Optimizer step
             if iteration < opt.iterations:
@@ -153,11 +232,7 @@ def prepare_output_and_logger(args):
         print("Tensorboard not available: not logging progress")
     return tb_writer
 
-def training_report(tb_writer, iteration, Ll1, loss, l1_loss, elapsed, testing_iterations, scene : Scene, renderFunc, renderArgs):
-    if tb_writer:
-        tb_writer.add_scalar('train_loss_patches/l1_loss', Ll1.item(), iteration)
-        tb_writer.add_scalar('train_loss_patches/total_loss', loss.item(), iteration)
-        tb_writer.add_scalar('iter_time', elapsed, iteration)
+def training_report(tb_writer, iteration, l1_loss, elapsed, testing_iterations, scene : Scene, renderFunc, renderArgs):
 
     # Report test and samples of training set
     if iteration in testing_iterations:
@@ -200,11 +275,11 @@ if __name__ == "__main__":
     parser.add_argument('--port', type=int, default=6009)
     parser.add_argument('--debug_from', type=int, default=-1)
     parser.add_argument('--detect_anomaly', action='store_true', default=False)
-    parser.add_argument("--test_iterations", nargs="+", type=int, default=[5_000, 30_000])
-    parser.add_argument("--save_iterations", nargs="+", type=int, default=[5_000, 30_000])
+    parser.add_argument("--test_iterations", nargs="+", type=int, default=[3_000,9000, 30_000])
+    parser.add_argument("--save_iterations", nargs="+", type=int, default=[3_000,9000, 30_000])
     parser.add_argument("--quiet", action="store_true")
-    parser.add_argument("--checkpoint_iterations", nargs="+", type=int, default=[5000])
-    parser.add_argument("--start_checkpoint", type=str, default = None)
+    parser.add_argument("--checkpoint_iterations", nargs="+", type=int, default=[3_000,9000])
+    parser.add_argument("--start_checkpoint", type=str, default = "/root/autodl-tmp/gaussian-splatting/output/pretrain_truck/chkpnt5000.pth")
     args = parser.parse_args(sys.argv[1:])
     args.save_iterations.append(args.iterations)
     
