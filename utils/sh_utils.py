@@ -116,3 +116,10 @@ def RGB2SH(rgb):
 
 def SH2RGB(sh):
     return sh * C0 + 0.5
+
+if __name__ == '__main__':
+    rgb = torch.randn(1024,3)
+    sh = RGB2SH(rgb)
+    rgb2 = SH2RGB(sh)
+    print(rgb[0])
+    print(rgb2[0])

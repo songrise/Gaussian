@@ -24,6 +24,10 @@ from argparse import ArgumentParser, Namespace
 from arguments import ModelParams, PipelineParams, OptimizationParams
 import clip
 from torchvision import transforms
+from utils.sh_utils import *
+from models.style_net import StyleNet
+from models.clip_loss import CLIPLoss
+from models.sds import StableDiffusion
 try:
     from torch.utils.tensorboard import SummaryWriter
     TENSORBOARD_FOUND = True
@@ -95,16 +99,27 @@ class VGGPerceptualLoss(nn.Module):
 def training(dataset, opt, pipe, testing_iterations, saving_iterations, checkpoint_iterations, checkpoint, debug_from):
     first_iter = 0
     tb_writer = prepare_output_and_logger(dataset)
+    #############init model################
     gaussians = GaussianModel(dataset.sh_degree)
     scene = Scene(dataset, gaussians)
     gaussians._xyz.requires_grad = False
     gaussians._rotation.requires_grad = False
     gaussians._scaling.requires_grad = False
-
+    gaussians._features_rest.requires_grad = False
+    gaussians._features_dc.requires_grad = False
+    gaussians._opacity.requires_grad = True
+    # img_aug = transforms.Compose([
+    #     transforms.RandomPerspective(0.2,),
+    # ])
+    stylenet = StyleNet().to("cuda")
     clip_model = clip.load("ViT-B/16", jit=False)[0].eval().requires_grad_(False).to("cuda")
     perceptual = VGGPerceptualLoss().to("cuda")
-    img_reshpae = transforms.Resize((224, 224))
+    clip_loss = CLIPLoss().to("cuda")
+    sds = StableDiffusion(None, version="2.0").requires_grad_(False)
+    img_reshape = transforms.Resize((224, 224))
     gaussians.training_setup(opt)
+    stylenet_optimizer = torch.optim.Adam(stylenet.parameters(), lr=1e-4)
+    ############################
     if checkpoint:
         (model_params, _) = torch.load(checkpoint)
         gaussians.restore(model_params, opt)
@@ -139,9 +154,26 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations, checkpoi
 
         gaussians.update_learning_rate(iteration)
 
+        # extract all point position and SHs
+        xyz_, features_ = gaussians.get_xyz, gaussians.get_features
+        xyz_ = xyz_.detach()
+        features_ = features_.detach()
+        features_dc = gaussians.get_features_dc.squeeze(1).detach()
+        rgb_dc = SH2RGB(features_dc)
+        # print(rgb_dc.min(), rgb_dc.max())
+
+        #map xyz_ to a unit sphere
+        xyz_ = xyz_ / torch.norm(xyz_, dim=1, keepdim=True)
+        
+        rgb_dc_stylized = stylenet(xyz_, rgb_dc)
+        # print(rgb_dc_stylized.min(), rgb_dc_stylized.max())
+        features_dc_stylized = RGB2SH(rgb_dc_stylized.unsqueeze(1))
+        #update gaussians
+        gaussians._features_dc = features_dc_stylized
+
         # Every 1000 its we increase the levels of SH up to a maximum degree
-        if iteration % 1000 == 0:
-            gaussians.oneupSHdegree()
+        # if iteration % 1000 == 0:
+        #     gaussians.oneupSHdegree()
 
         # Pick a random Camera
         if not viewpoint_stack:
@@ -158,20 +190,21 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations, checkpoi
         image, viewspace_point_tensor, visibility_filter, radii = render_pkg["render"], render_pkg["viewspace_points"], render_pkg["visibility_filter"], render_pkg["radii"]
 
         # Loss
-        gt_image = viewpoint_cam.original_image.cuda()
+        gt_image = viewpoint_cam.original_image.cuda().unsqueeze(0)
         #CLIP-loss
-        image = img_reshpae(image).unsqueeze(0)
-        image_embed = clip_model.encode_image(image)
-        text = "a starry night painting"
-        text_embed = clip_model.encode_text(clip.tokenize(text).cuda())
-        loss = 1. -torch.cosine_similarity(image_embed, text_embed).mean()
+        image = img_reshape(image).unsqueeze(0)
+        # image_embed = clip_model.encode_image(image)
+        # text = "a starry night painting"
+        # text_embed = clip_model.encode_text(clip.tokenize(text).cuda())
+        loss = clip_loss(gt_image, "a photo of a truck", image, "a photo of a truck in starry night painting style")
+        # sds.mannual_backward(sds.get_text_embeds("a photo of a truck in starry night painting style"), image, 75)
         perceptual_loss = perceptual(image, gt_image)
-        loss = loss + perceptual_loss
+        loss =  .5 * perceptual_loss
 
         loss.backward()
 
         iter_end.record()
-
+        
         with torch.no_grad():
             # Progress bar
             ema_loss_for_log = 0.4 * loss.item() + 0.6 * ema_loss_for_log
@@ -204,12 +237,15 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations, checkpoi
             # Optimizer step
             if iteration < opt.iterations:
                 gaussians.optimizer.step()
+                stylenet_optimizer.step()
                 gaussians.optimizer.zero_grad(set_to_none = True)
-
+                stylenet_optimizer.zero_grad(set_to_none = True)
             if (iteration in checkpoint_iterations):
                 print("\n[ITER {}] Saving Checkpoint".format(iteration))
                 torch.save((gaussians.capture(), iteration), scene.model_path + "/chkpnt" + str(iteration) + ".pth")
-
+        
+        gaussians._features_dc = features_dc.unsqueeze(1) #restore
+        
 def prepare_output_and_logger(args):    
     if not args.model_path:
         if os.getenv('OAR_JOB_ID'):
@@ -275,8 +311,8 @@ if __name__ == "__main__":
     parser.add_argument('--port', type=int, default=6009)
     parser.add_argument('--debug_from', type=int, default=-1)
     parser.add_argument('--detect_anomaly', action='store_true', default=False)
-    parser.add_argument("--test_iterations", nargs="+", type=int, default=[3_000,9000, 30_000])
-    parser.add_argument("--save_iterations", nargs="+", type=int, default=[3_000,9000, 30_000])
+    parser.add_argument("--test_iterations", nargs="+", type=int, default=[1, 500, 1_000, 2000, 3_000, 9000, 30_000])
+    parser.add_argument("--save_iterations", nargs="+", type=int, default=[3_000, 9000, 30_000])
     parser.add_argument("--quiet", action="store_true")
     parser.add_argument("--checkpoint_iterations", nargs="+", type=int, default=[3_000,9000])
     parser.add_argument("--start_checkpoint", type=str, default = "/root/autodl-tmp/gaussian-splatting/output/pretrain_truck/chkpnt5000.pth")
