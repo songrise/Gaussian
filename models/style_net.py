@@ -82,6 +82,9 @@ class StyleNet(nn.Module):
         self.delta_sh_head.weight.data.uniform_(-1e-2, 1e-2)
         self.delta_sh_head.bias.data.uniform_(-1e-3, 1e-3)
 
+        self.rgb_proj = nn.Linear(3, 3)
+        self.rgb_proj.weight.data.uniform_(-1e-2, 1e-2)
+        self.rgb_proj.bias.data.uniform_(-1e-3, 1e-3)
 
     def forward(self, xyz, rgb):
         xyz = self.embed(xyz)
@@ -92,8 +95,10 @@ class StyleNet(nn.Module):
             else:
                 xyz = self.hidden_act(fc(xyz))
         delta_rgb =  self.out_act(self.delta_sh_head(xyz))
-        rgb = torch.clamp(rgb + delta_rgb, 0, 1)
-        return rgb
+
+        rgb_proj = self.out_act(self.rgb_proj(rgb))
+        rgb_out = torch.clamp(rgb + delta_rgb + rgb_proj, 0, 1)
+        return rgb_out
 if __name__ == '__main__':
 
     xyz = torch.randn(1024,3)

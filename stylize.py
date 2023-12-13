@@ -26,72 +26,14 @@ import clip
 from torchvision import transforms
 from utils.sh_utils import *
 from models.style_net import StyleNet
-from models.clip_loss import CLIPLoss
+from criteria.clip_loss import CLIPLoss
+from criteria.vgg import VGGPerceptualLoss
 from models.sds import StableDiffusion
 try:
     from torch.utils.tensorboard import SummaryWriter
     TENSORBOARD_FOUND = True
 except ImportError:
     TENSORBOARD_FOUND = False
-
-
-import torch
-import torch.nn as nn
-from torchvision.models import vgg16
-
-__all__ = ['VGGPerceptualLoss']
-
-from torchvision.models import vgg16
-# VGG loss, Cite from https://gist.github.com/alper111/8233cdb0414b4cb5853f2f730ab95a49
-class VGGPerceptualLoss(nn.Module):
-    def __init__(self, resize=True):
-        super(VGGPerceptualLoss, self).__init__()
-        blocks = []
-        blocks.append(vgg16(pretrained=True).features[:4].eval())
-        blocks.append(vgg16(pretrained=True).features[4:9].eval())
-        # 4.21 can wang
-        blocks.append(vgg16(pretrained=True).features[9:16].eval())
-        # 4.19 can wang
-        blocks.append(vgg16(pretrained=True).features[16:23].eval())
-        for bl in blocks:
-            for p in bl:
-                p.requires_grad = False
-        self.blocks = nn.ModuleList(blocks)
-        self.transform = nn.functional.interpolate
-        self.mean = nn.Parameter(torch.tensor([0.485, 0.456, 0.406]).view(1,3,1,1))
-        self.std = nn.Parameter(torch.tensor([0.229, 0.224, 0.225]).view(1,3,1,1))
-        self.resize = resize
-
-    def forward(self, input, target, feature_layers=[0, 1, 2, 3]):
-        if input.shape[1] != 3:
-            input = input.repeat(1, 3, 1, 1)
-            target = target.repeat(1, 3, 1, 1)
-
-        #print ("=============")
-        #print (input.min())
-        #print ("=============")
-        #print (target.min())
-
-        # normalize [-1, 1] to [0, 1] first
-        #input = (input + 1) / 2
-        #target = (target + 1) / 2
-
-        input = (input-self.mean) / self.std
-        target = (target-self.mean) / self.std
-        if self.resize:
-            input = self.transform(input, mode='bilinear', size=(224, 224), align_corners=False)
-            target = self.transform(target, mode='bilinear', size=(224, 224), align_corners=False)
-        loss = 0.0
-        x = input
-        y = target
-        for i, block in enumerate(self.blocks):
-            x = block(x)
-            y = block(y)
-            if i == 2:
-            #if i == 1:
-            #if i in feature_layers: # for 421_0
-                loss += torch.nn.functional.l1_loss(x, y)
-        return loss
 
 
 
@@ -103,18 +45,18 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations, checkpoi
     gaussians = GaussianModel(dataset.sh_degree)
     scene = Scene(dataset, gaussians)
     gaussians._xyz.requires_grad = False
-    gaussians._rotation.requires_grad = False
-    gaussians._scaling.requires_grad = False
-    gaussians._features_rest.requires_grad = False
-    gaussians._features_dc.requires_grad = False
-    gaussians._opacity.requires_grad = True
-    # img_aug = transforms.Compose([
-    #     transforms.RandomPerspective(0.2,),
-    # ])
+    gaussians._rotation.requires_grad = True
+    gaussians._scaling.requires_grad = True
+    gaussians._features_rest.requires_grad = True
+    gaussians._features_dc.requires_grad = True
+    gaussians._opacity.requires_grad = False
+    img_aug = transforms.Compose([
+        transforms.RandomPerspective(0.2,),
+    ])
     stylenet = StyleNet().to("cuda")
     clip_model = clip.load("ViT-B/16", jit=False)[0].eval().requires_grad_(False).to("cuda")
     perceptual = VGGPerceptualLoss().to("cuda")
-    clip_loss = CLIPLoss().to("cuda")
+    clip_loss = CLIPLoss(direction_loss_type="mae").to("cuda")
     sds = StableDiffusion(None, version="2.0").requires_grad_(False)
     img_reshape = transforms.Resize((224, 224))
     gaussians.training_setup(opt)
@@ -153,23 +95,23 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations, checkpoi
         iter_start.record()
 
         gaussians.update_learning_rate(iteration)
+        #!HARDCODED Dec 12:  now, directly optimize
+        # # extract all point position and SHs
+        # xyz_, features_ = gaussians.get_xyz, gaussians.get_features
+        # xyz_ = xyz_.detach()
+        # features_ = features_.detach()
+        # features_dc = gaussians.get_features_dc.squeeze(1).detach()
+        # rgb_dc = SH2RGB(features_dc)
+        # # print(rgb_dc.min(), rgb_dc.max())
 
-        # extract all point position and SHs
-        xyz_, features_ = gaussians.get_xyz, gaussians.get_features
-        xyz_ = xyz_.detach()
-        features_ = features_.detach()
-        features_dc = gaussians.get_features_dc.squeeze(1).detach()
-        rgb_dc = SH2RGB(features_dc)
-        # print(rgb_dc.min(), rgb_dc.max())
-
-        #map xyz_ to a unit sphere
-        xyz_ = xyz_ / torch.norm(xyz_, dim=1, keepdim=True)
+        # #map xyz_ to a unit sphere
+        # xyz_ = xyz_ / torch.norm(xyz_, dim=1, keepdim=True)
         
-        rgb_dc_stylized = stylenet(xyz_, rgb_dc)
-        # print(rgb_dc_stylized.min(), rgb_dc_stylized.max())
-        features_dc_stylized = RGB2SH(rgb_dc_stylized.unsqueeze(1))
-        #update gaussians
-        gaussians._features_dc = features_dc_stylized
+        # rgb_dc_stylized = stylenet(xyz_, rgb_dc)
+        # # print(rgb_dc_stylized.min(), rgb_dc_stylized.max())
+        # features_dc_stylized = RGB2SH(rgb_dc_stylized.unsqueeze(1))
+        # #update gaussians
+        # gaussians._features_dc = features_dc_stylized
 
         # Every 1000 its we increase the levels of SH up to a maximum degree
         # if iteration % 1000 == 0:
@@ -188,20 +130,23 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations, checkpoi
 
         render_pkg = render(viewpoint_cam, gaussians, pipe, bg)
         image, viewspace_point_tensor, visibility_filter, radii = render_pkg["render"], render_pkg["viewspace_points"], render_pkg["visibility_filter"], render_pkg["radii"]
-
+        # apply perspective transformation
+        image = img_aug(image)
         # Loss
         gt_image = viewpoint_cam.original_image.cuda().unsqueeze(0)
         #CLIP-loss
-        image = img_reshape(image).unsqueeze(0)
-        # image_embed = clip_model.encode_image(image)
-        # text = "a starry night painting"
-        # text_embed = clip_model.encode_text(clip.tokenize(text).cuda())
-        loss = clip_loss(gt_image, "a photo of a truck", image, "a photo of a truck in starry night painting style")
-        # sds.mannual_backward(sds.get_text_embeds("a photo of a truck in starry night painting style"), image, 75)
-        perceptual_loss = perceptual(image, gt_image)
-        loss =  .5 * perceptual_loss
+        src_text = "a DSLR photo"
+        tgt_text = "a fauvisim painting"
+        loss = clip_loss(gt_image, src_text, image.unsqueeze(0), tgt_text)
+        # text_embed = clip_model.encode_text(clip.tokenize(src_text).cuda())
+        loss = loss + 10.0 * clip_loss.forward_patch_loss(gt_image, src_text, image, tgt_text)
+        # sds.manual_backward(sds.get_text_embeds("a photo of a truck in starry night painting style"), image, 75)
+        # sds.manual_backward_dds(sds.get_text_embeds(src_text), gt_image, sds.get_text_embeds(tgt_text), image.unsqueeze(0), guidance_scale=7.5)
+        # perceptual_loss = perceptual(image.unsqueeze(0), gt_image)
 
+        # loss = perceptual_loss 
         loss.backward()
+        # loss = 0
 
         iter_end.record()
         
@@ -243,8 +188,11 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations, checkpoi
             if (iteration in checkpoint_iterations):
                 print("\n[ITER {}] Saving Checkpoint".format(iteration))
                 torch.save((gaussians.capture(), iteration), scene.model_path + "/chkpnt" + str(iteration) + ".pth")
-        
-        gaussians._features_dc = features_dc.unsqueeze(1) #restore
+        # if iteration % 2000 == 0: #apply learned color every 1000 iterations
+        #     stylenet = StyleNet().to("cuda")
+        #     stylenet_optimizer = torch.optim.Adam(stylenet.parameters(), lr=1e-3)
+        # else:
+        #     gaussians._features_dc = features_dc.unsqueeze(1) 
         
 def prepare_output_and_logger(args):    
     if not args.model_path:
@@ -255,9 +203,19 @@ def prepare_output_and_logger(args):
         args.model_path = os.path.join("./output/", unique_str[0:10])
         
     # Set up output folder
+    #if exist, append a number to the folder name
+    if os.path.exists(os.path.join("./output",args.model_path)):
+        model_path = os.path.join("./output",args.model_path)
+        i = 0
+        while os.path.exists(model_path):
+            model_path = os.path.join("./output",args.model_path + "_" + str(i))
+            i += 1
+        args.model_path = model_path
+    else:
+        args.model_path = os.path.join("./output",args.model_path)
     print("Output folder: {}".format(args.model_path))
-    os.makedirs(args.model_path, exist_ok = True)
-    with open(os.path.join(args.model_path, "cfg_args"), 'w') as cfg_log_f:
+    os.makedirs(args.model_path , exist_ok = True)
+    with open(os.path.join(args.model_path , "cfg_args"), 'w') as cfg_log_f:
         cfg_log_f.write(str(Namespace(**vars(args))))
 
     # Create Tensorboard writer
@@ -271,7 +229,7 @@ def prepare_output_and_logger(args):
 def training_report(tb_writer, iteration, l1_loss, elapsed, testing_iterations, scene : Scene, renderFunc, renderArgs):
 
     # Report test and samples of training set
-    if iteration in testing_iterations:
+    if iteration % 1000 == 0 or iteration == 1:
         torch.cuda.empty_cache()
         validation_configs = ({'name': 'test', 'cameras' : scene.getTestCameras()}, 
                               {'name': 'train', 'cameras' : [scene.getTrainCameras()[idx % len(scene.getTrainCameras())] for idx in range(5, 30, 5)]})

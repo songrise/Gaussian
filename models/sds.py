@@ -91,7 +91,7 @@ class StableDiffusion(nn.Module):
         return text_embeddings
 
     
-    def mannual_backward(self, text_embeddings, pred_rgb:torch.Tensor, guidance_scale=100, pred_depth:torch.Tensor = None) -> None:
+    def manual_backward(self, text_embeddings, pred_rgb:torch.Tensor, guidance_scale=100, pred_depth:torch.Tensor = None, latent=None,) -> None:
         """
         backward the SDS loss the the pred_rgb.
         Input:
@@ -100,25 +100,30 @@ class StableDiffusion(nn.Module):
         return:
             grad_map: [1, 3, H, W], in the same dimension.
         """ 
-        h, w = pred_rgb.shape[-2:]
+        if latent is None:
+            h, w = pred_rgb.shape[-2:]
 
-        # zero pad to 512x512
-        pred_rgb_512 = torchvision.transforms.functional.pad(pred_rgb, ((512-w)//2, ), fill=0, padding_mode='constant')
-        pred_rgb_512 = F.interpolate(pred_rgb, (512, 512), mode='bilinear', align_corners=False)
-        # debug_utils.dump_tensor(pred_rgb_512, 'pred_rgb_512.pkl')
-        if self.use_depth and pred_depth is not None:
-            pred_depth = F.interpolate(pred_depth, size=(64, 64), mode='bicubic',
-                                align_corners=False)
-            pred_depth = 2.0 * (pred_depth - pred_depth.min()) / (pred_depth.max() - pred_depth.min()) - 1.0
-            pred_depth = torch.cat([pred_depth] * 2)
-        # torch.cuda.synchronize(); print(f'[TIME] guiding: interp {time.time() - _t:.4f}s')
+            # zero pad to 512x512
+            pred_rgb_512 = torchvision.transforms.functional.pad(pred_rgb, ((512-w)//2, ), fill=0, padding_mode='constant')
+            pred_rgb_512 = F.interpolate(pred_rgb, (512, 512), mode='bilinear', align_corners=False)
+            # debug_utils.dump_tensor(pred_rgb_512, 'pred_rgb_512.pkl')
+            if self.use_depth and pred_depth is not None:
+                pred_depth = F.interpolate(pred_depth, size=(64, 64), mode='bicubic',
+                                    align_corners=False)
+                pred_depth = 2.0 * (pred_depth - pred_depth.min()) / (pred_depth.max() - pred_depth.min()) - 1.0
+                pred_depth = torch.cat([pred_depth] * 2)
+            # torch.cuda.synchronize(); print(f'[TIME] guiding: interp {time.time() - _t:.4f}s')
+
+
+            # encode image into latents with vae, requires grad!
+            # _t = time.time()
+            latents = self.encode_imgs(pred_rgb_512)
+        else:
+            latents = latent
 
         # timestep ~ U(0.02, 0.98) to avoid very high/low noise level
         t = torch.randint(self.min_step, self.max_step + 1, [1], dtype=torch.long, device=self.device)
-
-        # encode image into latents with vae, requires grad!
-        # _t = time.time()
-        latents = self.encode_imgs(pred_rgb_512)
+        # t = torch.randint(self.min_step, 100, [1], dtype=torch.long, device=self.device)
         # torch.cuda.synchronize(); print(f'[TIME] guiding: vae enc {time.time() - _t:.4f}s')
 
         # predict the noise residual with unet, NO grad!
@@ -150,10 +155,25 @@ class StableDiffusion(nn.Module):
         # _t = time.time()
         latents.backward(gradient=grad, retain_graph=True)
 
+    def manual_backward_dds(self, src_text_embd, src_img, tgt_text_embd, tgt_img, guidance_scale=100, src_latent=None, tgt_latent=None):
+        # h, w = src_img.shape[-2:]
 
+        # zero pad to 512x512
+        # pred_rgb_512 = torchvision.transforms.functional.pad(src_img, ((512-w)//2, ), fill=0, padding_mode='constant')
+        if src_latent is None:
+            src_img_512 = F.interpolate(src_img, (512, 512), mode='bilinear', align_corners=False)
+            src_latent = self.encode_imgs(src_img_512).requires_grad_(False)
+        if tgt_latent is None:
+            tgt_img_512 = F.interpolate(tgt_img, (512, 512), mode='bilinear', align_corners=False)
+            tgt_latent = self.encode_imgs(tgt_img_512).requires_grad_(True)
+        with torch.no_grad(): # notice calc_grad does not rely on autograd
+            src_grad = self.calc_grad(src_text_embd, src_img, guidance_scale=guidance_scale, latent=src_latent)
+        tgt_grad = self.calc_grad(tgt_text_embd, tgt_img, guidance_scale=guidance_scale, latent=tgt_latent)
+        grad = tgt_grad - src_grad
+        tgt_latent.backward(gradient=grad, retain_graph=True)
    
 
-    def calc_grad(self, text_embeddings, pred_rgb:torch.Tensor, guidance_scale=100) -> torch.Tensor:
+    def calc_grad(self, text_embeddings, pred_rgb:torch.Tensor, guidance_scale=100, latent=None) -> torch.Tensor:
         """
         calculate the gradient of the predicted rgb
         Input:
@@ -165,20 +185,25 @@ class StableDiffusion(nn.Module):
            # interp to 512x512 to be fed into vae.
 
         # _t = time.time()
-        h, w = pred_rgb.shape[-2:]
- 
+        if latent is None:
+            h, w = pred_rgb.shape[-2:]
+    
 
-        # zero pad to 512x512
-        pred_rgb_512 = torchvision.transforms.functional.pad(pred_rgb, ((512-w)//2, ), fill=0, padding_mode='constant')
-        pred_rgb_512 = F.interpolate(pred_rgb, (512, 512), mode='bilinear', align_corners=False)
-        # torch.cuda.synchronize(); print(f'[TIME] guiding: interp {time.time() - _t:.4f}s')
+            # zero pad to 512x512
+            pred_rgb_512 = torchvision.transforms.functional.pad(pred_rgb, ((512-w)//2, ), fill=0, padding_mode='constant')
+            pred_rgb_512 = F.interpolate(pred_rgb, (512, 512), mode='bilinear', align_corners=False)
+            # torch.cuda.synchronize(); print(f'[TIME] guiding: interp {time.time() - _t:.4f}s')
+
+
+
+            # encode image into latents with vae, requires grad!
+            # _t = time.time()
+            latents = self.encode_imgs(pred_rgb_512)
+        else:
+            latents = latent
 
         # timestep ~ U(0.02, 0.98) to avoid very high/low noise level
         t = torch.randint(self.min_step, self.max_step + 1, [1], dtype=torch.long, device=self.device)
-
-        # encode image into latents with vae, requires grad!
-        # _t = time.time()
-        latents = self.encode_imgs(pred_rgb_512)
         # torch.cuda.synchronize(); print(f'[TIME] guiding: vae enc {time.time() - _t:.4f}s')
 
         # predict the noise residual with unet, NO grad!
@@ -203,14 +228,26 @@ class StableDiffusion(nn.Module):
 
         # clip grad for stable training?
         grad = grad.clamp(-1, 1)
+        #!HARDCODED Dec 06: modified for getting latent grad
+        # # manually backward, since we omitted an item in grad and cannot simply autodiff.
+        # # _t = time.time()
+        # latents.backward(gradient=grad, retain_graph=True)
+        # # torch.cuda.synchronize(); print(f'[TIME] guiding: backward {time.time() - _t:.4f}s')
 
-        # manually backward, since we omitted an item in grad and cannot simply autodiff.
-        # _t = time.time()
-        latents.backward(gradient=grad, retain_graph=True)
-        # torch.cuda.synchronize(); print(f'[TIME] guiding: backward {time.time() - _t:.4f}s')
+        # pred_rgb_grad = pred_rgb.grad.detach().clone()
+        # return pred_rgb_grad
+        #!HARDCODED Dec 06: new
+        #TODO Dec 06: refactor the latent flag
+        if latent is None:            
+            latents.backward(gradient=grad, retain_graph=True)
+            # torch.cuda.synchronize(); print(f'[TIME] guiding: backward {time.time() - _t:.4f}s')
 
-        pred_rgb_grad = pred_rgb.grad.detach().clone()
-        return pred_rgb_grad
+            pred_rgb_grad = pred_rgb.grad.detach().clone()
+            return pred_rgb_grad
+        else:
+            return grad
+
+
 
 
 
@@ -256,7 +293,7 @@ class StableDiffusion(nn.Module):
         grad = w * (noise_pred - noise)
 
         # clip grad for stable training?
-        grad = grad.clamp(-1, 1)
+        # grad = grad.clamp(-1, 1)
 
         # manually backward, since we omitted an item in grad and cannot simply autodiff.
         # _t = time.time()
@@ -394,35 +431,146 @@ class StableDiffusion(nn.Module):
 #     print('Image saved as img_grid.png')
 
 if __name__ == '__main__':
-    # optimize 2d tensor as image representation.
-    import PIL.Image as Image
-    device = torch.device('cuda')
-    image = nn.Parameter(torch.empty(1, 3, 512, 512, device=device))
-    #init with the image to be edited
-    with open("panda_snow.png", 'rb') as f:
-        image_ = Image.open(f)
-        image_ = torchvision.transforms.functional.resize(image_, (512, 512))
-        image_ = torchvision.transforms.functional.to_tensor(image_)[:3,...].unsqueeze(0)
-        image.data = image_.to(device)
-    optimizer = torch.optim.SGD([image], lr=1.0)
-    decay = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.90)
-    n_iter = 200
-    sd = StableDiffusion(device, version="2.0")
-    prompt = "a Squirrel is snowboarding"
-    image_steps = []
-    for i in range(n_iter):
-        optimizer.zero_grad()
-        sd.mannual_backward(sd.get_text_embeds(prompt), image, guidance_scale=20)
-        optimizer.step()
-        if i % 20 == 0:
-            decay.step()
-            print(f'[INFO] iter {i}, loss {torch.norm(image.grad)}')
-            image_steps.append(image.detach().clone())
+    def fix_randomness(seed=42):
+        import os
+        import numpy as np
+        # https: // www.zhihu.com/question/542479848/answer/2567626957
+        os.environ['PYTHONHASHSEED'] = str(seed)
+
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
+
+        np.random.seed(seed)
+        
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+        torch.backends.cudnn.enabled = False
+
+    def zero_shot_gen_sds():
+        # optimize 2d tensor as image representation.
+        import PIL.Image as Image
+        device = torch.device('cuda')
+        # image = nn.Parameter(torch.empty(1, 3, 512, 512, device=device))
+        # #init with the image to be edited
+        # with open("panda_snow.png", 'rb') as f:
+        #     image_ = Image.open(f)
+        #     image_ = torchvision.transforms.functional.resize(image_, (512, 512))
+        #     image_ = torchvision.transforms.functional.to_tensor(image_)[:3,...].unsqueeze(0)
+        #     image.data = image_.to(device)
+        
+        latent = nn.Parameter(torch.empty(1, 4, 64, 64, device=device))
+        latent.data = torch.randn_like(latent.data)
+        optimizer = torch.optim.SGD([latent], lr=1.0)
+        decay = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.90)
+        n_iter = 200
+        sd = StableDiffusion(device, version="2.0")
+        image = sd.decode_latents(latent)
+        prompt = "a Squirrel is snowboarding"
+        image_steps = []
+        for i in range(n_iter):
+            optimizer.zero_grad()
+            sd.manual_backward(sd.get_text_embeds(prompt), image, guidance_scale=20, latent=latent)
+            optimizer.step()
+            if i % 20 == 0:
+                decay.step()
+                print(f'[INFO] iter {i}, loss {torch.norm(latent.grad)}')
+                image = sd.decode_latents(latent)
+                image_steps.append(image.detach().clone())
+        
+        # visualize as grid
+        image_steps = torch.cat(image_steps, dim=0)
+        from torchvision.utils import make_grid
+        grid = make_grid(image_steps, nrow=5, padding=10)
+        # save
+        from torchvision.utils import save_image
+        save_image(grid, 'image_steps.png')
     
-    # visualize as grid
-    image_steps = torch.cat(image_steps, dim=0)
-    from torchvision.utils import make_grid
-    grid = make_grid(image_steps, nrow=5, padding=10)
-    # save
-    from torchvision.utils import save_image
-    save_image(grid, 'image_steps.png')
+    def edit_sds():
+        # optimize 2d tensor as image representation.
+        import PIL.Image as Image
+        device = torch.device('cuda')
+
+
+        sd = StableDiffusion(device, version="2.0")
+        latent = nn.Parameter(torch.empty(1, 4, 64, 64, device=device))
+        #init with the image to be edited
+        with open("/root/autodl-tmp/gaussian-splatting/data/fangzhou/images/000001.png", 'rb') as f:
+            image_ = Image.open(f)
+            image_ = torchvision.transforms.functional.resize(image_, (512, 512))
+            image_ = torchvision.transforms.functional.to_tensor(image_)[:3,...].unsqueeze(0)
+            image_latent = sd.encode_imgs(image_.to(device))
+            latent.data = image_latent.data
+        optimizer = torch.optim.SGD([latent], lr=1.0)
+        decay = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.90)
+        n_iter = 200
+
+        image = sd.decode_latents(latent)
+        prompt = "van gogh potrait"
+        image_steps = []
+        for i in range(n_iter):
+            optimizer.zero_grad()
+            sd.manual_backward(sd.get_text_embeds(prompt), image, guidance_scale=20, latent=latent)
+            optimizer.step()
+            if i % 20 == 0:
+                decay.step()
+                print(f'[INFO] iter {i}, loss {torch.norm(latent.grad)}')
+                image = sd.decode_latents(latent)
+                image_steps.append(image.detach().clone())
+        
+        # visualize as grid
+        image_steps = torch.cat(image_steps, dim=0)
+        from torchvision.utils import make_grid
+        grid = make_grid(image_steps, nrow=5, padding=10)
+        # save
+        from torchvision.utils import save_image
+        save_image(grid, 'image_steps.png')
+
+    def edit_dds():
+        # optimize 2d tensor as image representation.
+        import PIL.Image as Image
+        device = torch.device('cuda')
+
+
+        sd = StableDiffusion(device, version="2.0")
+        latent = nn.Parameter(torch.empty(1, 4, 64, 64, device=device))
+        #init with the image to be edited
+        with open("panda_snow.png", 'rb') as f:
+            image_ = Image.open(f)
+            image_ = torchvision.transforms.functional.resize(image_, (512, 512))
+            image_ = torchvision.transforms.functional.to_tensor(image_)[:3,...].unsqueeze(0)
+            image_latent = sd.encode_imgs(image_.to(device))
+            latent.data = image_latent.data
+            latent_orig = latent.data.clone().requires_grad_(False)
+        optimizer = torch.optim.SGD([latent], lr=1.0)
+        decay = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.90)
+        n_iter = 200
+
+        image = sd.decode_latents(latent)
+        prompt_a = "a panda is snowboarding"
+        prompt_b = "a panda is snowboarding"
+        image_steps = []
+        for i in range(n_iter):
+            optimizer.zero_grad()
+            grad_a = sd.calc_grad(sd.get_text_embeds(prompt_a), image, guidance_scale=20, latent=latent_orig)
+            grad_b = sd.calc_grad(sd.get_text_embeds(prompt_b), image, guidance_scale=20, latent=latent)
+            grad_apply = grad_b - grad_a
+            latent.backward(gradient=grad_apply, retain_graph=True)
+            optimizer.step()
+            if i % 20 == 0:
+                decay.step()
+                print(f'[INFO] iter {i}, loss {torch.norm(latent.grad)}')
+                image = sd.decode_latents(latent)
+                image_steps.append(image.detach().clone())
+        
+        # visualize as grid
+        image_steps = torch.cat(image_steps, dim=0)
+        from torchvision.utils import make_grid
+        grid = make_grid(image_steps, nrow=5, padding=10)
+        # save
+        from torchvision.utils import save_image
+        save_image(grid, 'image_steps.png')
+
+    fix_randomness()
+    edit_sds()
+    # edit_dds()

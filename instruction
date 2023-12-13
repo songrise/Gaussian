@@ -1,4 +1,8 @@
 python render.py -m /root/autodl-tmp/gaussian-splatting/output/c274275d-7 -s /root/autodl-tmp/gaussian-splatting/data/truck
 nohup tensorboard --logdir /root/autodl-tmp/gaussian-splatting/output &
 
-nohup python stylize.py --start_checkpoint /root/autodl-tmp/gaussian-splatting/output/pretrain_truck/chkpnt5000.pth -s /root/autodl-tmp/gaussian-splatting/data/truck &
+nohup python stylize.py --start_checkpoint /root/autodl-tmp/gaussian-splatting/output/pretrain_truck/chkpnt5000.pth -s /root/autodl-tmp/gaussian-splatting/data/truck --model_path patchclip --iterations 10000 &
+
+nohup python stylize.py --start_checkpoint /root/autodl-tmp/gaussian-splatting/output/pretrain_trex/chkpnt10000.pth -s /root/autodl-tmp/gaussian-splatting/data/trex --model_path patchclip --iterations 10000 &
+
+nohup python stylize.py --start_checkpoint /root/autodl-tmp/gaussian-splatting/output/pretrain_trex/chkpnt10000.pth -s /root/autodl-tmp/gaussian-splatting/data/trex --model_path dds --iterations 10000 &
