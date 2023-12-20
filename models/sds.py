@@ -9,7 +9,7 @@
 
 
 from transformers import CLIPTextModel, CLIPTokenizer, logging
-from diffusers import AutoencoderKL, UNet2DConditionModel, PNDMScheduler
+from diffusers import AutoencoderKL, UNet2DConditionModel, PNDMScheduler, DDIMScheduler
 
 # suppress partial model loading warning
 logging.set_verbosity_error()
@@ -63,9 +63,10 @@ class StableDiffusion(nn.Module):
 
         # 4. Create a scheduler for inference
         self.scheduler = PNDMScheduler(beta_start=0.00085, beta_end=0.012, beta_schedule="scaled_linear", num_train_timesteps=self.num_train_timesteps)  
+        # self.scheduler = DDIMScheduler(num_train_timesteps=self.num_train_timesteps)
+
         self.alphas = self.scheduler.alphas_cumprod.to(self.device) # for convenience
 
-        # self.scheduler = DDIMScheduler()
         # self.alphas = self.scheduler.alphas_cumprod.to(self.device) # for convenience
 
         print(f'[INFO] loaded stable diffusion!')
@@ -91,7 +92,7 @@ class StableDiffusion(nn.Module):
         return text_embeddings
 
     
-    def manual_backward(self, text_embeddings, pred_rgb:torch.Tensor, guidance_scale=100, pred_depth:torch.Tensor = None, latent=None,) -> None:
+    def manual_backward(self, text_embeddings, pred_rgb:torch.Tensor, guidance_scale=100, pred_depth:torch.Tensor = None, latent=None) -> None:
         """
         backward the SDS loss the the pred_rgb.
         Input:
@@ -137,19 +138,168 @@ class StableDiffusion(nn.Module):
             if self.use_depth and pred_depth is not None:
                 latent_model_input = torch.cat([latent_model_input, pred_depth], dim=1)
             noise_pred = self.unet(latent_model_input, t, encoder_hidden_states=text_embeddings).sample
+
         # torch.cuda.synchronize(); print(f'[TIME] guiding: unet {time.time() - _t:.4f}s')
 
         # perform guidance (high scale from paper!)
         noise_pred_uncond, noise_pred_text = noise_pred.chunk(2)
+        # CFG
         noise_pred = noise_pred_uncond + guidance_scale * (noise_pred_text - noise_pred_uncond)
 
         # w(t), sigma_t^2
         w = (1 - self.alphas[t])
         # w = self.alphas[t] ** 0.5 * (1 - self.alphas[t])
+
         grad = w * (noise_pred - noise)
 
         # clip grad for stable training?
-        grad = grad.clamp(-1, 1)
+        # grad = grad.clamp(-1, 1)
+
+        # manually backward, since we omitted an item in grad and cannot simply autodiff.
+        # _t = time.time()
+        latents.backward(gradient=grad, retain_graph=True)
+
+    def manual_backward_nfsd(self, text_embeddings, pred_rgb:torch.Tensor, guidance_scale=100, pred_depth:torch.Tensor = None, latent=None) -> None:
+        """
+        backward the SDS loss the the pred_rgb.
+        Input:
+            pred_rgb: Tensor, [1, 3, H, W] assume requires grad
+
+        return:
+            grad_map: [1, 3, H, W], in the same dimension.
+        """ 
+        if latent is None:
+            h, w = pred_rgb.shape[-2:]
+
+            # zero pad to 512x512
+            pred_rgb_512 = torchvision.transforms.functional.pad(pred_rgb, ((512-w)//2, ), fill=0, padding_mode='constant')
+            pred_rgb_512 = F.interpolate(pred_rgb, (512, 512), mode='bilinear', align_corners=False)
+            # debug_utils.dump_tensor(pred_rgb_512, 'pred_rgb_512.pkl')
+            if self.use_depth and pred_depth is not None:
+                pred_depth = F.interpolate(pred_depth, size=(64, 64), mode='bicubic',
+                                    align_corners=False)
+                pred_depth = 2.0 * (pred_depth - pred_depth.min()) / (pred_depth.max() - pred_depth.min()) - 1.0
+                pred_depth = torch.cat([pred_depth] * 2)
+            # torch.cuda.synchronize(); print(f'[TIME] guiding: interp {time.time() - _t:.4f}s')
+
+
+            # encode image into latents with vae, requires grad!
+            # _t = time.time()
+            latents = self.encode_imgs(pred_rgb_512)
+        else:
+            latents = latent
+
+        # timestep ~ U(0.02, 0.98) to avoid very high/low noise level
+        t = torch.randint(self.min_step, self.max_step + 1, [1], dtype=torch.long, device=self.device)
+        # t = torch.randint(self.min_step, 100, [1], dtype=torch.long, device=self.device)
+        # torch.cuda.synchronize(); print(f'[TIME] guiding: vae enc {time.time() - _t:.4f}s')
+
+        # predict the noise residual with unet, NO grad!
+        # _t = time.time()
+        with torch.no_grad():
+            # add noise
+            noise = torch.randn_like(latents)
+            latents_noisy = self.scheduler.add_noise(latents, noise, t)
+            # pred noise
+            latent_model_input = torch.cat([latents_noisy] * 2)        
+            if self.use_depth and pred_depth is not None:
+                latent_model_input = torch.cat([latent_model_input, pred_depth], dim=1)
+            noise_pred = self.unet(latent_model_input, t, encoder_hidden_states=text_embeddings).sample
+
+            # for the negative text
+            noise_ = torch.randn_like(latents)
+            text_neg = "unrealistic, blurry, low quality, out of focus, ugly, low contrast, dull, dark, low-resolution, gloomy"
+            text_neg_embeddings = self.get_text_embeds(text_neg)
+            noise_pred_neg = self.unet(latent_model_input, t, encoder_hidden_states=text_neg_embeddings).sample
+            noise_pred_neg_uncod, noise_pred_neg_text = noise_pred_neg.chunk(2)
+        # torch.cuda.synchronize(); print(f'[TIME] guiding: unet {time.time() - _t:.4f}s')
+
+        # perform guidance (high scale from paper!)
+        noise_pred_uncond, noise_pred_text = noise_pred.chunk(2)
+        # CFG
+        if t > 200:
+            noise_pred = (noise_pred_uncond - noise_pred_neg_text) + guidance_scale * (noise_pred_text - noise_pred_uncond)
+        else:
+            noise_pred = noise_pred_uncond + guidance_scale * (noise_pred_text - noise_pred_uncond)
+
+        # w(t), sigma_t^2
+        w = (1 - self.alphas[t])
+        # w = self.alphas[t] ** 0.5 * (1 - self.alphas[t])
+        #noise free
+        grad = w * noise_pred
+
+
+        # clip grad for stable training?
+        # grad = grad.clamp(-1, 1)
+
+        # manually backward, since we omitted an item in grad and cannot simply autodiff.
+        # _t = time.time()
+        latents.backward(gradient=grad, retain_graph=True)
+    
+    def manual_backward_csd(self, text_embeddings, pred_rgb:torch.Tensor, guidance_scale=100, pred_depth:torch.Tensor = None, latent=None) -> None:
+        """
+        backward the SDS loss the the pred_rgb.
+        Input:
+            pred_rgb: Tensor, [1, 3, H, W] assume requires grad
+
+        return:
+            grad_map: [1, 3, H, W], in the same dimension.
+        """ 
+        if latent is None:
+            h, w = pred_rgb.shape[-2:]
+
+            # zero pad to 512x512
+            pred_rgb_512 = torchvision.transforms.functional.pad(pred_rgb, ((512-w)//2, ), fill=0, padding_mode='constant')
+            pred_rgb_512 = F.interpolate(pred_rgb, (512, 512), mode='bilinear', align_corners=False)
+            # debug_utils.dump_tensor(pred_rgb_512, 'pred_rgb_512.pkl')
+            if self.use_depth and pred_depth is not None:
+                pred_depth = F.interpolate(pred_depth, size=(64, 64), mode='bicubic',
+                                    align_corners=False)
+                pred_depth = 2.0 * (pred_depth - pred_depth.min()) / (pred_depth.max() - pred_depth.min()) - 1.0
+                pred_depth = torch.cat([pred_depth] * 2)
+            # torch.cuda.synchronize(); print(f'[TIME] guiding: interp {time.time() - _t:.4f}s')
+
+
+            # encode image into latents with vae, requires grad!
+            # _t = time.time()
+            latents = self.encode_imgs(pred_rgb_512)
+        else:
+            latents = latent
+
+        # timestep ~ U(0.02, 0.98) to avoid very high/low noise level
+        t = torch.randint(self.min_step, self.max_step + 1, [1], dtype=torch.long, device=self.device)
+        # t = torch.randint(self.min_step, 100, [1], dtype=torch.long, device=self.device)
+        # torch.cuda.synchronize(); print(f'[TIME] guiding: vae enc {time.time() - _t:.4f}s')
+
+        # predict the noise residual with unet, NO grad!
+        # _t = time.time()
+        with torch.no_grad():
+            # add noise
+            noise = torch.randn_like(latents)
+            latents_noisy = self.scheduler.add_noise(latents, noise, t)
+            # pred noise
+            latent_model_input = torch.cat([latents_noisy] * 2)        
+            if self.use_depth and pred_depth is not None:
+                latent_model_input = torch.cat([latent_model_input, pred_depth], dim=1)
+            noise_pred = self.unet(latent_model_input, t, encoder_hidden_states=text_embeddings).sample
+
+        # torch.cuda.synchronize(); print(f'[TIME] guiding: unet {time.time() - _t:.4f}s')
+
+        # perform guidance (high scale from paper!)
+        noise_pred_uncond, noise_pred_text = noise_pred.chunk(2)
+        # CFG, but only use the guidance part, discard the uncond term
+        noise_pred = guidance_scale * (noise_pred_text - noise_pred_uncond)
+
+        # w(t), sigma_t^2
+        w = (1 - self.alphas[t])
+        # w = self.alphas[t] ** 0.5 * (1 - self.alphas[t])
+
+        #also noise free
+        grad = w * (noise_pred)
+
+
+        # clip grad for stable training?
+        # grad = grad.clamp(-1, 1)
 
         # manually backward, since we omitted an item in grad and cannot simply autodiff.
         # _t = time.time()
@@ -204,6 +354,8 @@ class StableDiffusion(nn.Module):
 
         # timestep ~ U(0.02, 0.98) to avoid very high/low noise level
         t = torch.randint(self.min_step, self.max_step + 1, [1], dtype=torch.long, device=self.device)
+        # t = torch.randint(self.min_step, 50, [1], dtype=torch.long, device=self.device)
+
         # torch.cuda.synchronize(); print(f'[TIME] guiding: vae enc {time.time() - _t:.4f}s')
 
         # predict the noise residual with unet, NO grad!
@@ -227,7 +379,7 @@ class StableDiffusion(nn.Module):
         grad = w * (noise_pred - noise)
 
         # clip grad for stable training?
-        grad = grad.clamp(-1, 1)
+        # grad = grad.clamp(-1, 1)
         #!HARDCODED Dec 06: modified for getting latent grad
         # # manually backward, since we omitted an item in grad and cannot simply autodiff.
         # # _t = time.time()

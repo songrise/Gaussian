@@ -45,13 +45,14 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations, checkpoi
     gaussians = GaussianModel(dataset.sh_degree)
     scene = Scene(dataset, gaussians)
     gaussians._xyz.requires_grad = False
-    gaussians._rotation.requires_grad = True
-    gaussians._scaling.requires_grad = True
-    gaussians._features_rest.requires_grad = True
+    gaussians._rotation.requires_grad = False
+    gaussians._scaling.requires_grad = False
+    gaussians._features_rest.requires_grad = False
     gaussians._features_dc.requires_grad = True
     gaussians._opacity.requires_grad = False
     img_aug = transforms.Compose([
         transforms.RandomPerspective(0.2,),
+        # transforms.RandomHorizontalFlip(0.5),
     ])
     stylenet = StyleNet().to("cuda")
     clip_model = clip.load("ViT-B/16", jit=False)[0].eval().requires_grad_(False).to("cuda")
@@ -136,15 +137,15 @@ def training(dataset, opt, pipe, testing_iterations, saving_iterations, checkpoi
         gt_image = viewpoint_cam.original_image.cuda().unsqueeze(0)
         #CLIP-loss
         src_text = "a DSLR photo"
-        tgt_text = "a fauvisim painting"
-        loss = clip_loss(gt_image, src_text, image.unsqueeze(0), tgt_text)
+        tgt_text = "a pencil sketch"
+        # loss = clip_loss(gt_image, src_text, image.unsqueeze(0), tgt_text)
         # text_embed = clip_model.encode_text(clip.tokenize(src_text).cuda())
-        loss = loss + 10.0 * clip_loss.forward_patch_loss(gt_image, src_text, image, tgt_text)
+        # loss = loss + 10.0 * clip_loss.forward_patch_loss(gt_image, src_text, image, tgt_text)
         # sds.manual_backward(sds.get_text_embeds("a photo of a truck in starry night painting style"), image, 75)
-        # sds.manual_backward_dds(sds.get_text_embeds(src_text), gt_image, sds.get_text_embeds(tgt_text), image.unsqueeze(0), guidance_scale=7.5)
-        # perceptual_loss = perceptual(image.unsqueeze(0), gt_image)
+        sds.manual_backward_dds(sds.get_text_embeds(src_text), gt_image, sds.get_text_embeds(tgt_text), image.unsqueeze(0), guidance_scale=7.5)
+        perceptual_loss = 100 * perceptual(image.unsqueeze(0), gt_image)
 
-        # loss = perceptual_loss 
+        loss = perceptual_loss 
         loss.backward()
         # loss = 0
 
